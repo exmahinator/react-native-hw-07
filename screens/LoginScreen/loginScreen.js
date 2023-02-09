@@ -72,7 +72,7 @@ export default function LoginScreen() {
             <Text style={styles.introText}>Войти</Text>
           </View>
           <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            behavior={Platform.OS == "ios" ? "padding" : ""}
           >
             <View>
               <TextInput
