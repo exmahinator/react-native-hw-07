@@ -17,7 +17,7 @@ import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
 
-export default function RegistrationScreen(props) {
+export default function RegistrationScreen({ navigation }) {
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -98,94 +98,102 @@ export default function RegistrationScreen(props) {
 
   const onLinkPress = () => {
     console.log("Sending to login form...");
-    props.switchScreen();
+    // props.switchScreen();
+    navigation.navigate("Login")
   };
 
   return (
     <TouchableWithoutFeedback onPress={onScreenPress}>
-      <View style={styles.container} onLayout={onLayoutRootView}>
-        <View
-          style={{
-            ...styles.subContainer,
-            marginBottom: keyboardIsShown ? 180 : 0,
-          }}
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../../assets/img/backgroundPhoto_opt.jpg")}
+          style={styles.image}
         >
-          <TouchableOpacity
-            onPress={onAvatarAddPress}
-            style={styles.avatarContainer}
-            activeOpacity={0.5}
-          >
-            <View style={styles.avatarAddPlaceholder}></View>
-            <ImageBackground
-              source={require("../../assets/img/add_opt.png")}
-              resizeMode="cover"
-              style={styles.avatarAddIcon}
-            ></ImageBackground>
-          </TouchableOpacity>
-          <View style={styles.textContainer}>
-            <Text style={styles.introText}>Реєстрація</Text>
+          <View style={styles.signInContainer} onLayout={onLayoutRootView}>
+            <View
+              style={{
+                ...styles.subContainer,
+                marginBottom: keyboardIsShown ? 180 : 0,
+              }}
+            >
+              <TouchableOpacity
+                onPress={onAvatarAddPress}
+                style={styles.avatarContainer}
+                activeOpacity={0.5}
+              >
+                <View style={styles.avatarAddPlaceholder}></View>
+                <ImageBackground
+                  source={require("../../assets/img/add_opt.png")}
+                  resizeMode="cover"
+                  style={styles.avatarAddIcon}
+                ></ImageBackground>
+              </TouchableOpacity>
+              <View style={styles.textContainer}>
+                <Text style={styles.introText}>Реєстрація</Text>
+              </View>
+              <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : ""}
+              >
+                <View>
+                  <TextInput
+                    value={name}
+                    onChangeText={nameHandler}
+                    placeholder="Ваше ім'я"
+                    style={{
+                      ...styles.input,
+                      borderColor: isNameInFocus ? "#FF6C00" : "#fff",
+                      backgroundColor: isNameInFocus ? "#fff" : "#F6F6F6",
+                      color: isNameInFocus ? "#000" : "#bdbdbd",
+                    }}
+                    onFocus={onNameInputFocus}
+                    onBlur={onNameInputBlur}
+                  />
+                </View>
+                <View style={{ marginTop: 16 }}>
+                  <TextInput
+                    value={email}
+                    onChangeText={emailHandler}
+                    placeholder="Адреса елекронної скриньки"
+                    style={{
+                      ...styles.input,
+                      borderColor: isEmailInFocus ? "#FF6C00" : "#fff",
+                      backgroundColor: isEmailInFocus ? "#fff" : "#F6F6F6",
+                      color: isEmailInFocus ? "#000" : "#bdbdbd",
+                    }}
+                    onFocus={onEmailInputFocus}
+                    onBlur={onEmailInputBlur}
+                  />
+                </View>
+                <View style={{ marginTop: 16 }}>
+                  <TextInput
+                    value={password}
+                    onChangeText={passwordHandler}
+                    placeholder="Пароль"
+                    secureTextEntry={true}
+                    style={{
+                      ...styles.input,
+                      borderColor: isPasswordInFocus ? "#FF6C00" : "#fff",
+                      backgroundColor: isPasswordInFocus ? "#fff" : "#F6F6F6",
+                      color: isPasswordInFocus ? "#000" : "#bdbdbd",
+                    }}
+                    onFocus={onPasswordInputFocus}
+                    onBlur={onPasswordInputBlur}
+                  />
+                </View>
+              </KeyboardAvoidingView>
+              <TouchableOpacity
+                style={styles.buttonContainer}
+                onPress={onRegister}
+                activeOpacity={0.5}
+              >
+                <Text style={styles.buttonText}>Увійти</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onLinkPress} activeOpacity={0.5}>
+                <Text style={styles.linkText}>Уже є акаунт? Увійти</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : ""}
-          >
-            <View>
-              <TextInput
-                value={name}
-                onChangeText={nameHandler}
-                placeholder="Ваше ім'я"
-                style={{
-                  ...styles.input,
-                  borderColor: isNameInFocus ? "#FF6C00" : "#fff",
-                  backgroundColor: isNameInFocus ? "#fff" : "#F6F6F6",
-                  color: isNameInFocus ? "#000" : "#bdbdbd",
-                }}
-                onFocus={onNameInputFocus}
-                onBlur={onNameInputBlur}
-              />
-            </View>
-            <View style={{ marginTop: 16 }}>
-              <TextInput
-                value={email}
-                onChangeText={emailHandler}
-                placeholder="Адреса елекронної скриньки"
-                style={{
-                  ...styles.input,
-                  borderColor: isEmailInFocus ? "#FF6C00" : "#fff",
-                  backgroundColor: isEmailInFocus ? "#fff" : "#F6F6F6",
-                  color: isEmailInFocus ? "#000" : "#bdbdbd",
-                }}
-                onFocus={onEmailInputFocus}
-                onBlur={onEmailInputBlur}
-              />
-            </View>
-            <View style={{ marginTop: 16 }}>
-              <TextInput
-                value={password}
-                onChangeText={passwordHandler}
-                placeholder="Пароль"
-                secureTextEntry={true}
-                style={{
-                  ...styles.input,
-                  borderColor: isPasswordInFocus ? "#FF6C00" : "#fff",
-                  backgroundColor: isPasswordInFocus ? "#fff" : "#F6F6F6",
-                  color: isPasswordInFocus ? "#000" : "#bdbdbd",
-                }}
-                onFocus={onPasswordInputFocus}
-                onBlur={onPasswordInputBlur}
-              />
-            </View>
-          </KeyboardAvoidingView>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={onRegister}
-            activeOpacity={0.5}
-          >
-            <Text style={styles.buttonText}>Увійти</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onLinkPress} activeOpacity={0.5}>
-            <Text style={styles.linkText}>Уже є акаунт? Увійти</Text>
-          </TouchableOpacity>
-        </View>
+        </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -193,9 +201,20 @@ export default function RegistrationScreen(props) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  signInContainer: {
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 263,
+    // paddingTop: 150,
     fontSize: 20,
     height: "100%",
     width: "100%",

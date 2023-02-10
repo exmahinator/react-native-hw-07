@@ -9,14 +9,15 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 
-import { useFonts } from 'expo-font';
+import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
 
-export default function LoginScreen(props) {
+export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
@@ -74,67 +75,77 @@ export default function LoginScreen(props) {
 
   const onLinkPress = () => {
     console.log("Sending to registration form...");
-    props.switchScreen()
+    // props.switchScreen();
+    navigation.navigate("Register")
   };
 
   return (
     <TouchableWithoutFeedback onPress={onScreenPress}>
-      <View style={styles.container} onLayout={onLayoutRootView}>
-        <View
-          style={{
-            ...styles.subContainer,
-            marginBottom: keyboardIsShown ? 50 : 0,
-          }}
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../../assets/img/backgroundPhoto_opt.jpg")}
+          style={styles.image}
         >
-          <View style={styles.textContainer}>
-            <Text style={styles.introText}>Увійти</Text>
+          <View style={styles.signInContainer} onLayout={onLayoutRootView}>
+            <View
+              style={{
+                ...styles.subContainer,
+                marginBottom: keyboardIsShown ? 50 : 0,
+              }}
+            >
+              <View style={styles.textContainer}>
+                <Text style={styles.introText}>Увійти</Text>
+              </View>
+              <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : ""}
+              >
+                <View>
+                  <TextInput
+                    value={email}
+                    onChangeText={emailHandler}
+                    placeholder="Адреса елекронної скриньки"
+                    style={{
+                      ...styles.input,
+                      borderColor: isEmailInFocus ? "#FF6C00" : "#fff",
+                      backgroundColor: isEmailInFocus ? "#fff" : "#F6F6F6",
+                      color: isEmailInFocus ? "#000" : "#bdbdbd",
+                    }}
+                    onFocus={onEmailInputFocus}
+                    onBlur={onEmailInputBlur}
+                  />
+                </View>
+                <View style={{ marginTop: 16 }}>
+                  <TextInput
+                    value={password}
+                    onChangeText={passwordHandler}
+                    placeholder="Пароль"
+                    secureTextEntry={true}
+                    style={{
+                      ...styles.input,
+                      borderColor: isPasswordInFocus ? "#FF6C00" : "#fff",
+                      backgroundColor: isPasswordInFocus ? "#fff" : "#F6F6F6",
+                      color: isPasswordInFocus ? "#000" : "#bdbdbd",
+                    }}
+                    onFocus={onPasswordInputFocus}
+                    onBlur={onPasswordInputBlur}
+                  />
+                </View>
+              </KeyboardAvoidingView>
+              <TouchableOpacity
+                style={styles.buttonContainer}
+                onPress={onLogin}
+                activeOpacity={0.5}
+              >
+                <Text style={styles.buttonText}>Увійти</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onLinkPress} activeOpacity={0.5}>
+                <Text style={styles.linkText}>
+                  Немає акаунта? Зареєструватися
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : ""}
-          >
-            <View>
-              <TextInput
-                value={email}
-                onChangeText={emailHandler}
-                placeholder="Адреса елекронної скриньки"
-                style={{
-                  ...styles.input,
-                  borderColor: isEmailInFocus ? "#FF6C00" : "#fff",
-                  backgroundColor: isEmailInFocus ? "#fff" : "#F6F6F6",
-                  color: isEmailInFocus ? "#000" : "#bdbdbd",
-                }}
-                onFocus={onEmailInputFocus}
-                onBlur={onEmailInputBlur}
-              />
-            </View>
-            <View style={{ marginTop: 16 }}>
-              <TextInput
-                value={password}
-                onChangeText={passwordHandler}
-                placeholder="Пароль"
-                secureTextEntry={true}
-                style={{
-                  ...styles.input,
-                  borderColor: isPasswordInFocus ? "#FF6C00" : "#fff",
-                  backgroundColor: isPasswordInFocus ? "#fff" : "#F6F6F6",
-                  color: isPasswordInFocus ? "#000" : "#bdbdbd",
-                }}
-                onFocus={onPasswordInputFocus}
-                onBlur={onPasswordInputBlur}
-              />
-            </View>
-          </KeyboardAvoidingView>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={onLogin}
-            activeOpacity={0.5}
-          >
-            <Text style={styles.buttonText}>Увійти</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onLinkPress} activeOpacity={0.5}>
-            <Text style={styles.linkText}>Немає акаунта? Зареєструватися</Text>
-          </TouchableOpacity>
-        </View>
+        </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -142,9 +153,20 @@ export default function LoginScreen(props) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  signInContainer: {
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 320,
+    // paddingTop: 200,
     fontSize: 20,
     height: "100%",
     width: "100%",
