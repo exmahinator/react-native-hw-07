@@ -16,10 +16,13 @@ import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
 
-export default function LoginScreen() {
-  const [name, setName] = useState("");
+export default function LoginScreen(props) {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
+
+  const [isEmailInFocus, setIsEmailInFocus] = useState(false);
+  const [isPasswordInFocus, setIsPasswordInFocus] = useState(false);
 
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("../../assets/fonts/Roboto/Roboto-Regular.ttf"),
@@ -37,11 +40,25 @@ export default function LoginScreen() {
     return null;
   }
 
-  const nameHandler = (text) => setName(text);
+  const emailHandler = (text) => setEmail(text);
   const passwordHandler = (text) => setPassword(text);
 
-  const onInputFocus = () => {
+  const onEmailInputFocus = () => {
     setKeyboardIsShown(true);
+    setIsEmailInFocus(true);
+  };
+
+  const onEmailInputBlur = () => {
+    setIsEmailInFocus(false);
+  };
+
+  const onPasswordInputFocus = () => {
+    setKeyboardIsShown(true);
+    setIsPasswordInFocus(true);
+  };
+
+  const onPasswordInputBlur = () => {
+    setIsPasswordInFocus(false);
   };
 
   const onScreenPress = () => {
@@ -50,13 +67,14 @@ export default function LoginScreen() {
   };
 
   const onLogin = () => {
-    console.log("Credentials", `${name} + ${password}`);
-    setName("");
+    console.log("Credentials", `${email} + ${password}`);
+    setEmail("");
     setPassword("");
   };
 
   const onLinkPress = () => {
     console.log("Sending to registration form...");
+    props.switchScreen()
   };
 
   return (
@@ -69,18 +87,24 @@ export default function LoginScreen() {
           }}
         >
           <View style={styles.textContainer}>
-            <Text style={styles.introText}>Войти</Text>
+            <Text style={styles.introText}>Увійти</Text>
           </View>
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : ""}
           >
             <View>
               <TextInput
-                value={name}
-                onChangeText={nameHandler}
+                value={email}
+                onChangeText={emailHandler}
                 placeholder="Адреса елекронної скриньки"
-                style={styles.input}
-                onFocus={onInputFocus}
+                style={{
+                  ...styles.input,
+                  borderColor: isEmailInFocus ? "#FF6C00" : "#fff",
+                  backgroundColor: isEmailInFocus ? "#fff" : "#F6F6F6",
+                  color: isEmailInFocus ? "#000" : "#bdbdbd",
+                }}
+                onFocus={onEmailInputFocus}
+                onBlur={onEmailInputBlur}
               />
             </View>
             <View style={{ marginTop: 16 }}>
@@ -89,8 +113,14 @@ export default function LoginScreen() {
                 onChangeText={passwordHandler}
                 placeholder="Пароль"
                 secureTextEntry={true}
-                style={styles.input}
-                onFocus={onInputFocus}
+                style={{
+                  ...styles.input,
+                  borderColor: isPasswordInFocus ? "#FF6C00" : "#fff",
+                  backgroundColor: isPasswordInFocus ? "#fff" : "#F6F6F6",
+                  color: isPasswordInFocus ? "#000" : "#bdbdbd",
+                }}
+                onFocus={onPasswordInputFocus}
+                onBlur={onPasswordInputBlur}
               />
             </View>
           </KeyboardAvoidingView>
@@ -145,7 +175,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderWidth: 1,
     borderRadius: 10,
-    textAlign: "center",
+    textAlign: "left",
     backgroundColor: "#f6f6f6",
     borderColor: "#fff",
     color: "#bdbdbd",

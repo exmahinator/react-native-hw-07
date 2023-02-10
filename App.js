@@ -1,30 +1,15 @@
-import { useCallback } from "react";
+import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { ImageBackground, StyleSheet, View, Text } from "react-native";
 import LoginScreen from "./screens/LoginScreen/loginScreen";
-// import * as Font from "expo-font";
-// import * as SplashScreen from "expo-splash-screen";
-
-// SplashScreen.preventAutoHideAsync();
-
-// const loadFonts = async () => {
-//   await Font.loadAsync({
-//     "Roboto-Regular": require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
-//     "Roboto-Medium": require("./assets/fonts/Roboto/Roboto-Medium.ttf"),
-//     "Roboto-Bold": require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
-//   });
-// };
+import RegistrationScreen from "./screens/RegistrationScreen/registrationScreen";
 
 export default function App() {
-  // const onLayoutRootView = useCallback(async () => {
-  //   if (loadFonts) {
-  //     await SplashScreen.hideAsync();
-  //   }
-  // }, [loadFonts]);
+  const [isLoginPage, setIsLoginPage] = useState(true);
 
-  // if (!loadFonts) {
-  //   return null;
-  // }
+  const toggleScreen = () => {
+    setIsLoginPage(!isLoginPage);
+  };
 
   return (
     <View style={styles.container}>
@@ -33,7 +18,8 @@ export default function App() {
         source={require("./assets/img/backgroundPhoto_opt.jpg")}
         style={styles.image}
       >
-        <LoginScreen />
+        {isLoginPage && <LoginScreen switchScreen={toggleScreen} />}
+        {!isLoginPage && <RegistrationScreen switchScreen={toggleScreen} />}
       </ImageBackground>
     </View>
   );
