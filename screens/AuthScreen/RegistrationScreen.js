@@ -29,6 +29,7 @@ export default function RegistrationScreen({ navigation }) {
 
   const onInputFocus = (event) => {
     setKeyboardIsShown(true);
+    console.log(event.target._nativeTag);
     const nativeTag = event.target._nativeTag;
     switch (nativeTag) {
       case 117:

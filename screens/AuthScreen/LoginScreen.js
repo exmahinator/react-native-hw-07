@@ -26,12 +26,13 @@ export default function LoginScreen({ navigation }) {
 
   const onInputFocus = (event) => {
     setKeyboardIsShown(true);
+    console.log(event.target._nativeTag);
     const nativeTag = event.target._nativeTag;
     switch (nativeTag) {
-      case 189:
+      case 23:
         setIsEmailInFocus(true);
         break;
-      case 195:
+      case 27:
         setIsPasswordInFocus(true);
         break;
       default:
@@ -43,10 +44,10 @@ export default function LoginScreen({ navigation }) {
   const onInputBlur = (event) => {
     const nativeTag = event.target._nativeTag;
     switch (nativeTag) {
-      case 189:
+      case 23:
         setIsEmailInFocus(false);
         break;
-      case 195:
+      case 27:
         setIsPasswordInFocus(false);
         break;
       default:
