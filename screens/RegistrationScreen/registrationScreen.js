@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,67 +12,58 @@ import {
   ImageBackground,
 } from "react-native";
 
-import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-
-SplashScreen.preventAutoHideAsync();
+const initialState = { avatar: "", name: "", email: "", password: "" };
 
 export default function RegistrationScreen({ navigation }) {
-  const [avatar, setAvatar] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [state, setState] = useState(initialState)
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
 
   const [isNameInFocus, setIsNameInFocus] = useState(false);
   const [isEmailInFocus, setIsEmailInFocus] = useState(false);
   const [isPasswordInFocus, setIsPasswordInFocus] = useState(false);
 
-  const [fontsLoaded] = useFonts({
-    "Roboto-Regular": require("../../assets/fonts/Roboto/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("../../assets/fonts/Roboto/Roboto-Medium.ttf"),
-    "Roboto-Bold": require("../../assets/fonts/Roboto/Roboto-Bold.ttf"),
-  });
+  const avatarHandler = () => setState((prevState) => ({...prevState, avatar: "Some avatar url"}));
+  const nameHandler = (value) => setState((prevState) => ({...prevState, name: value}));
+  const emailHandler = (value) => setState((prevState) => ({...prevState, email: value}));
+  const passwordHandler = (value) => setState((prevState) => ({...prevState, password: value}));
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
+  const onInputFocus = (event) => {
+    setKeyboardIsShown(true);
+    const nativeTag = event.target._nativeTag;
+    switch (nativeTag) {
+      case 117:
+        setIsNameInFocus(true);
+        break;
+      case 123:
+        setIsEmailInFocus(true);
+        break;
+      case 127:
+        setIsPasswordInFocus(true);
+        break;
+
+      default:
+        alert("Something went wrong...");
+        return;
     }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
-  const nameHandler = (text) => setName(text);
-  const emailHandler = (text) => setEmail(text);
-  const passwordHandler = (text) => setPassword(text);
-
-  const onNameInputFocus = () => {
-    setKeyboardIsShown(true);
-    setIsNameInFocus(true);
   };
 
-  const onNameInputBlur = () => {
-    setIsNameInFocus(false);
-  };
+  const onInputBlur = (event) => {
+    const nativeTag = event.target._nativeTag;
+    switch (nativeTag) {
+      case 117:
+        setIsNameInFocus(false);
+        break;
+      case 123:
+        setIsEmailInFocus(false);
+        break;
+      case 127:
+        setIsPasswordInFocus(false);
+        break;
 
-  const onEmailInputFocus = () => {
-    setKeyboardIsShown(true);
-    setIsEmailInFocus(true);
-  };
-
-  const onEmailInputBlur = () => {
-    setIsEmailInFocus(false);
-  };
-
-  const onPasswordInputFocus = () => {
-    setKeyboardIsShown(true);
-    setIsPasswordInFocus(true);
-  };
-
-  const onPasswordInputBlur = () => {
-    setIsPasswordInFocus(false);
+      default:
+        alert("Something went wrong...");
+        return;
+    }
   };
 
   const onScreenPress = () => {
@@ -80,26 +71,16 @@ export default function RegistrationScreen({ navigation }) {
     setKeyboardIsShown(false);
   };
 
-  const onAvatarAddPress = () => {
-    console.log("Here is some url link...");
-    setAvatar("Some avatar url");
-  };
-
   const onRegister = () => {
-    console.log(
-      "Registering data:",
-      `${avatar} + ${name} + ${email} + ${password}`
-    );
-    setAvatar("");
-    setName("");
-    setEmail("");
-    setPassword("");
+    console.log("Register data:", state);
+    setState(initialState);
+    console.log("Initial state:", initialState);
+    console.log("State after sending:", state);
   };
 
   const onLinkPress = () => {
     console.log("Sending to login form...");
-    // props.switchScreen();
-    navigation.navigate("Login")
+    navigation.navigate("Login");
   };
 
   return (
@@ -109,7 +90,7 @@ export default function RegistrationScreen({ navigation }) {
           source={require("../../assets/img/backgroundPhoto_opt.jpg")}
           style={styles.image}
         >
-          <View style={styles.signInContainer} onLayout={onLayoutRootView}>
+          <View style={styles.signInContainer}>
             <View
               style={{
                 ...styles.subContainer,
@@ -117,7 +98,7 @@ export default function RegistrationScreen({ navigation }) {
               }}
             >
               <TouchableOpacity
-                onPress={onAvatarAddPress}
+                onPress={avatarHandler}
                 style={styles.avatarContainer}
                 activeOpacity={0.5}
               >
@@ -136,7 +117,7 @@ export default function RegistrationScreen({ navigation }) {
               >
                 <View>
                   <TextInput
-                    value={name}
+                    value={state.name}
                     onChangeText={nameHandler}
                     placeholder="Ваше ім'я"
                     style={{
@@ -145,13 +126,13 @@ export default function RegistrationScreen({ navigation }) {
                       backgroundColor: isNameInFocus ? "#fff" : "#F6F6F6",
                       color: isNameInFocus ? "#000" : "#bdbdbd",
                     }}
-                    onFocus={onNameInputFocus}
-                    onBlur={onNameInputBlur}
+                    onFocus={onInputFocus}
+                    onBlur={onInputBlur}
                   />
                 </View>
                 <View style={{ marginTop: 16 }}>
                   <TextInput
-                    value={email}
+                    value={state.email}
                     onChangeText={emailHandler}
                     placeholder="Адреса елекронної скриньки"
                     style={{
@@ -160,13 +141,13 @@ export default function RegistrationScreen({ navigation }) {
                       backgroundColor: isEmailInFocus ? "#fff" : "#F6F6F6",
                       color: isEmailInFocus ? "#000" : "#bdbdbd",
                     }}
-                    onFocus={onEmailInputFocus}
-                    onBlur={onEmailInputBlur}
+                    onFocus={onInputFocus}
+                    onBlur={onInputBlur}
                   />
                 </View>
                 <View style={{ marginTop: 16 }}>
                   <TextInput
-                    value={password}
+                    value={state.password}
                     onChangeText={passwordHandler}
                     placeholder="Пароль"
                     secureTextEntry={true}
@@ -176,8 +157,8 @@ export default function RegistrationScreen({ navigation }) {
                       backgroundColor: isPasswordInFocus ? "#fff" : "#F6F6F6",
                       color: isPasswordInFocus ? "#000" : "#bdbdbd",
                     }}
-                    onFocus={onPasswordInputFocus}
-                    onBlur={onPasswordInputBlur}
+                    onFocus={onInputFocus}
+                    onBlur={onInputBlur}
                   />
                 </View>
               </KeyboardAvoidingView>
@@ -186,7 +167,7 @@ export default function RegistrationScreen({ navigation }) {
                 onPress={onRegister}
                 activeOpacity={0.5}
               >
-                <Text style={styles.buttonText}>Увійти</Text>
+                <Text style={styles.buttonText}>Зареєструватися</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={onLinkPress} activeOpacity={0.5}>
                 <Text style={styles.linkText}>Уже є акаунт? Увійти</Text>
