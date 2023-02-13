@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Dimensions,
   StyleSheet,
   Text,
   View,
@@ -12,55 +13,88 @@ import {
   ImageBackground,
 } from "react-native";
 
-const initialState = { avatar: "", name: "", email: "", password: "" };
+import {
+  AuthContainer,
+  AuthBackground,
+  AuthAvatarBtn,
+  AuthAvatarBackground,
+  AuthSubContainer,
+  AuthTextContainer,
+  AuthPageText,
+  AuthInputContainer,
+  AuthInput,
+  AuthNavBtn,
+  AuthNavText,
+  AuthNavLink,  
+} from "../../ui/auth";
+
+import addAvatar from "../../assets/img/add_opt.png"
+import removeAvatar from "../../assets/img/remove_opt.png"
+
+const initialState = { avatar: "NO", name: "", email: "", password: "" };
+
+const calculatedScreenWidth = `${Math.floor(
+  Dimensions.get("window").width - 32
+)}px`;
 
 export default function RegistrationScreen({ navigation }) {
-  const [state, setState] = useState(initialState)
+  const [state, setState] = useState(initialState);
+  const [avatarIsAdded, setAvatarIsAdded] = useState(false);
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
 
   const [isNameInFocus, setIsNameInFocus] = useState(false);
   const [isEmailInFocus, setIsEmailInFocus] = useState(false);
   const [isPasswordInFocus, setIsPasswordInFocus] = useState(false);
 
-  const avatarHandler = () => setState((prevState) => ({...prevState, avatar: "Some avatar url"}));
-  const nameHandler = (value) => setState((prevState) => ({...prevState, name: value}));
-  const emailHandler = (value) => setState((prevState) => ({...prevState, email: value}));
-  const passwordHandler = (value) => setState((prevState) => ({...prevState, password: value}));
+  const avatarHandler = () => {
+    // console.log(avatarIsAdded);
+    // console.log(state.avatar);
+    if (!avatarIsAdded) {
+      setState((prevState) => ({ ...prevState, avatar: `YES` }));
+      setAvatarIsAdded(!avatarIsAdded);
+      return;
+    }
+    setState((prevState) => ({ ...prevState, avatar: `NO` }));
+    setAvatarIsAdded(!avatarIsAdded);
+    return;
+  };
 
-  const onInputFocus = (event) => {
+  const nameHandler = (value) =>
+    setState((prevState) => ({ ...prevState, name: value }));
+  const emailHandler = (value) =>
+    setState((prevState) => ({ ...prevState, email: value }));
+  const passwordHandler = (value) =>
+    setState((prevState) => ({ ...prevState, password: value }));
+
+  const onInputFocus = (name) => {
     setKeyboardIsShown(true);
-    console.log(event.target._nativeTag);
-    const nativeTag = event.target._nativeTag;
-    switch (nativeTag) {
-      case 117:
+    switch (name) {
+      case "name":
         setIsNameInFocus(true);
         break;
-      case 123:
+      case "email":
         setIsEmailInFocus(true);
         break;
-      case 127:
+      case "password":
         setIsPasswordInFocus(true);
         break;
-
       default:
         alert("Something went wrong...");
         return;
     }
   };
 
-  const onInputBlur = (event) => {
-    const nativeTag = event.target._nativeTag;
-    switch (nativeTag) {
-      case 117:
+  const onInputBlur = (name) => {
+    switch (name) {
+      case "name":
         setIsNameInFocus(false);
         break;
-      case 123:
+      case "email":
         setIsEmailInFocus(false);
         break;
-      case 127:
+      case "password":
         setIsPasswordInFocus(false);
         break;
-
       default:
         alert("Something went wrong...");
         return;
@@ -86,97 +120,77 @@ export default function RegistrationScreen({ navigation }) {
 
   return (
     <TouchableWithoutFeedback onPress={onScreenPress}>
-      <View style={styles.container}>
-        <ImageBackground
+      <AuthContainer>
+        <AuthBackground
           source={require("../../assets/img/backgroundPhoto_opt.jpg")}
-          style={styles.image}
+          keyboardIsShown={keyboardIsShown}
         >
-          <View style={styles.signInContainer}>
-            <View
-              style={{
-                ...styles.subContainer,
-                marginBottom: keyboardIsShown ? 180 : 0,
-              }}
+          <AuthSubContainer>
+            <AuthAvatarBtn
+              onPress={() => avatarHandler()}
+              activeOpacity={0.5}
             >
-              <TouchableOpacity
-                onPress={avatarHandler}
-                style={styles.avatarContainer}
-                activeOpacity={0.5}
+              <AuthAvatarBackground></AuthAvatarBackground>
+              <ImageBackground
+                source={avatarIsAdded ? removeAvatar : addAvatar}
+                resizeMode="cover"
+                style={styles.avatarAddIcon}
+              ></ImageBackground>
+            </AuthAvatarBtn>
+            <AuthTextContainer>
+              <AuthPageText>Реєстрація</AuthPageText>
+            </AuthTextContainer>
+            <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : ""}
+            >
+              <AuthInputContainer screenWidth={calculatedScreenWidth}>
+                <AuthInput
+                  value={state.name}
+                  onChangeText={nameHandler}
+                  placeholder="Ваше ім'я"
+                  onFocus={() => onInputFocus("name")}
+                  onBlur={() => onInputBlur("name")}
+                  isInFocus={isNameInFocus}
+                />
+              </AuthInputContainer>
+              <AuthInputContainer screenWidth={calculatedScreenWidth}>
+                <AuthInput
+                  value={state.email}
+                  onChangeText={emailHandler}
+                  placeholder="Адреса елекронної скриньки"
+                  onFocus={() => onInputFocus("email")}
+                  onBlur={() => onInputBlur("email")}
+                  isInFocus={isEmailInFocus}
+                />
+              </AuthInputContainer>
+              <AuthInputContainer
+                screenWidth={calculatedScreenWidth}
+                extraMargin
               >
-                <View style={styles.avatarAddPlaceholder}></View>
-                <ImageBackground
-                  source={require("../../assets/img/add_opt.png")}
-                  resizeMode="cover"
-                  style={styles.avatarAddIcon}
-                ></ImageBackground>
-              </TouchableOpacity>
-              <View style={styles.textContainer}>
-                <Text style={styles.introText}>Реєстрація</Text>
-              </View>
-              <KeyboardAvoidingView
-                behavior={Platform.OS == "ios" ? "padding" : ""}
-              >
-                <View>
-                  <TextInput
-                    value={state.name}
-                    onChangeText={nameHandler}
-                    placeholder="Ваше ім'я"
-                    style={{
-                      ...styles.input,
-                      borderColor: isNameInFocus ? "#FF6C00" : "#fff",
-                      backgroundColor: isNameInFocus ? "#fff" : "#F6F6F6",
-                      color: isNameInFocus ? "#000" : "#bdbdbd",
-                    }}
-                    onFocus={onInputFocus}
-                    onBlur={onInputBlur}
-                  />
-                </View>
-                <View style={{ marginTop: 16 }}>
-                  <TextInput
-                    value={state.email}
-                    onChangeText={emailHandler}
-                    placeholder="Адреса елекронної скриньки"
-                    style={{
-                      ...styles.input,
-                      borderColor: isEmailInFocus ? "#FF6C00" : "#fff",
-                      backgroundColor: isEmailInFocus ? "#fff" : "#F6F6F6",
-                      color: isEmailInFocus ? "#000" : "#bdbdbd",
-                    }}
-                    onFocus={onInputFocus}
-                    onBlur={onInputBlur}
-                  />
-                </View>
-                <View style={{ marginTop: 16 }}>
-                  <TextInput
-                    value={state.password}
-                    onChangeText={passwordHandler}
-                    placeholder="Пароль"
-                    secureTextEntry={true}
-                    style={{
-                      ...styles.input,
-                      borderColor: isPasswordInFocus ? "#FF6C00" : "#fff",
-                      backgroundColor: isPasswordInFocus ? "#fff" : "#F6F6F6",
-                      color: isPasswordInFocus ? "#000" : "#bdbdbd",
-                    }}
-                    onFocus={onInputFocus}
-                    onBlur={onInputBlur}
-                  />
-                </View>
-              </KeyboardAvoidingView>
-              <TouchableOpacity
-                style={styles.buttonContainer}
-                onPress={onRegister}
-                activeOpacity={0.5}
-              >
-                <Text style={styles.buttonText}>Зареєструватися</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={onLinkPress} activeOpacity={0.5}>
-                <Text style={styles.linkText}>Уже є акаунт? Увійти</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ImageBackground>
-      </View>
+                <AuthInput
+                  value={state.password}
+                  onChangeText={passwordHandler}
+                  placeholder="Пароль"
+                  secureTextEntry={true}
+                  onFocus={() => onInputFocus("password")}
+                  onBlur={() => onInputBlur("password")}
+                  isInFocus={isPasswordInFocus}
+                />
+              </AuthInputContainer>
+            </KeyboardAvoidingView>
+            <AuthNavBtn
+              onPress={onRegister}
+              activeOpacity={0.5}
+              screenWidth={calculatedScreenWidth}
+            >
+              <AuthNavText>Зареєструватися</AuthNavText>
+            </AuthNavBtn>
+            <AuthNavLink onPress={onLinkPress} activeOpacity={0.5}>
+              <AuthNavText link>Уже є акаунт? Увійти</AuthNavText>
+            </AuthNavLink>
+          </AuthSubContainer>
+        </AuthBackground>
+      </AuthContainer>
     </TouchableWithoutFeedback>
   );
 }
