@@ -26,6 +26,7 @@ import {
 import userPlaceholder from "../../assets/img/User_opt.jpg"
 import addAvatar from "../../assets/img/add_opt.png"
 import removeAvatar from "../../assets/img/remove_opt.png"
+import backgroundImg from "../../assets/img/backgroundPhoto_opt.jpg"
 
 const initialState = { avatar: "NO", name: "", email: "", password: "" };
 
@@ -118,7 +119,7 @@ export default function RegistrationScreen({ navigation }) {
     <TouchableWithoutFeedback onPress={onScreenPress}>
       <AuthContainer>
         <AuthBackground
-          source={require("../../assets/img/backgroundPhoto_opt.jpg")}
+          source={backgroundImg}
           keyboardIsShown={keyboardIsShown}
         >
           <AuthSubContainer>

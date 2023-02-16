@@ -1,5 +1,4 @@
 import React from "react";
-import { StyleSheet } from "react-native";
 import {
   PostsContainer,
   PostsOwnerContainer,
@@ -57,15 +56,8 @@ export default function PostsScreen() {
           </PostsItemSubContainer>
         </PostsItemContainer> */}
         {userData.userPosts.map(
-          ({
-            id,
-            image,
-            description,
-            comments,
-            amountOfLikes,
-            imgLocation,
-          }) => {
-            const { amountOfComments } = comments;    
+          ({ id, image, description, comments, imgLocation }) => {
+            const { amountOfComments } = comments;
 
             return (
               <PostsItemContainer key={id}>
@@ -73,20 +65,23 @@ export default function PostsScreen() {
                 <PostsItemDescription>{description}</PostsItemDescription>
                 <PostsItemSubContainer>
                   <PostsItemDetailsContainer activeOpacity={0.5}>
-                    <PostsItemIcon source={amountOfComments ? commentIconFilled : commentIcon }></PostsItemIcon>
-                    <PostsItemResponsesAmount textIsHighlighted={amountOfComments !== 0}>
+                    <PostsItemIcon
+                      source={
+                        amountOfComments ? commentIconFilled : commentIcon
+                      }
+                    ></PostsItemIcon>
+                    <PostsItemResponsesAmount
+                      textIsHighlighted={amountOfComments !== 0}
+                    >
                       {amountOfComments}
-                    </PostsItemResponsesAmount>
-                  </PostsItemDetailsContainer>
-                  <PostsItemDetailsContainer marginLeft activeOpacity={0.5}>
-                    <PostsItemIcon source={likeIcon}></PostsItemIcon>
-                    <PostsItemResponsesAmount textIsHighlighted={amountOfLikes !== 0}>
-                      {amountOfLikes}
                     </PostsItemResponsesAmount>
                   </PostsItemDetailsContainer>
                   <PostsItemDetailsContainer flexGrow activeOpacity={0.5}>
                     <PostsItemIcon source={locationIcon}></PostsItemIcon>
-                    <PostsItemResponsesAmount textIsHighlighted={imgLocation !== ""}>
+                    <PostsItemResponsesAmount
+                      isLink
+                      textIsHighlighted={imgLocation !== ""}
+                    >
                       {imgLocation}
                     </PostsItemResponsesAmount>
                   </PostsItemDetailsContainer>
@@ -99,11 +94,3 @@ export default function PostsScreen() {
     </PostsContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
