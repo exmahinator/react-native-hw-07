@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import {
   Dimensions,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  TouchableOpacity,
-  ImageBackground,
 } from "react-native";
 
 import {
@@ -18,6 +12,7 @@ import {
   AuthBackground,
   AuthAvatarBtn,
   AuthAvatarBackground,
+  AuthAvatarIcon,
   AuthSubContainer,
   AuthTextContainer,
   AuthPageText,
@@ -28,6 +23,7 @@ import {
   AuthNavLink,  
 } from "../../ui/auth";
 
+import userPlaceholder from "../../assets/img/User_opt.jpg"
 import addAvatar from "../../assets/img/add_opt.png"
 import removeAvatar from "../../assets/img/remove_opt.png"
 
@@ -130,12 +126,12 @@ export default function RegistrationScreen({ navigation }) {
               onPress={() => avatarHandler()}
               activeOpacity={0.5}
             >
-              <AuthAvatarBackground></AuthAvatarBackground>
-              <ImageBackground
+              <AuthAvatarBackground source={avatarIsAdded && userPlaceholder} isFilled={avatarIsAdded}></AuthAvatarBackground>
+              <AuthAvatarIcon
                 source={avatarIsAdded ? removeAvatar : addAvatar}
+                isFilled={avatarIsAdded}
                 resizeMode="cover"
-                style={styles.avatarAddIcon}
-              ></ImageBackground>
+              ></AuthAvatarIcon>
             </AuthAvatarBtn>
             <AuthTextContainer>
               <AuthPageText>Реєстрація</AuthPageText>
@@ -194,99 +190,3 @@ export default function RegistrationScreen({ navigation }) {
     </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  signInContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 263,
-    // paddingTop: 150,
-    fontSize: 20,
-    height: "100%",
-    width: "100%",
-  },
-  subContainer: {
-    position: "relative",
-    alignItems: "center",
-    paddingTop: 92,
-    paddingHorizontal: 16,
-    backgroundColor: "#ffffff",
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
-    height: "100%",
-    width: "100%",
-  },
-  avatarContainer: {
-    position: "absolute",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    top: -60,
-    left: 128,
-  },
-  avatarAddPlaceholder: {
-    backgroundColor: "#F6F6F6",
-    width: 132,
-    height: 120,
-    borderRadius: 16,
-  },
-  avatarAddIcon: {
-    position: "absolute",
-    width: 25,
-    height: 25,
-    right: -12,
-    bottom: 14,
-  },
-  textContainer: {
-    marginBottom: 32,
-  },
-  introText: {
-    fontFamily: "Roboto-Medium",
-    fontSize: 30,
-    lineHeight: 35,
-    letterSpacing: 0.01,
-  },
-  input: {
-    fontFamily: "Roboto-Regular",
-    width: 343,
-    height: 50,
-    padding: 16,
-    borderWidth: 1,
-    borderRadius: 10,
-    textAlign: "left",
-    fontSize: 16,
-    lineHeight: 19,
-  },
-  buttonContainer: {
-    width: 343,
-    backgroundColor: "#ff6c00",
-    borderRadius: 100,
-    padding: 16,
-    marginTop: 43,
-    marginBottom: 16,
-  },
-  buttonText: {
-    fontFamily: "Roboto-Regular",
-    textAlign: "center",
-    color: "#ffffff",
-    fontSize: 16,
-    lineHeight: 19,
-  },
-  linkText: {
-    fontFamily: "Roboto-Regular",
-    textAlign: "center",
-    color: "#1B4371",
-    fontSize: 16,
-    lineHeight: 19,
-  },
-});

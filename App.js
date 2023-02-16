@@ -39,17 +39,13 @@ const useRoute = (isAuth) => {
     );
   }
   return (
-    <MainTab.Navigator>
-      <MainTab.Screen name="Posts" component={PostsScreen} />
-      <MainTab.Screen name="CreatePosts" component={CreatePostsScreen} />
-      <MainTab.Screen
-        name="Profile"
-        options={{ headerShown: false }}
-        component={ProfileScreen}
-      />
+    <MainTab.Navigator initialRouteName="Пости">
+      <MainTab.Screen name="Пости" component={PostsScreen} />
+      <MainTab.Screen name="Створити пости" component={CreatePostsScreen} />
+      <MainTab.Screen name="Профіль" component={ProfileScreen} />
     </MainTab.Navigator>
   );
-}
+};
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -70,7 +66,7 @@ export default function App() {
 
   onLayoutRootView();
 
-  const routing = useRoute(null);
+  const routing = useRoute(true);
 
   return (
     <NavigationContainer>
