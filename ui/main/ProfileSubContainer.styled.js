@@ -1,15 +1,15 @@
 import { View } from "react-native";
 import styled from "styled-components";
 
-const AuthSubContainer = styled(View)`
+const ProfileSubContainer = styled(View)`
   position: relative;
-  height: ${(props) => (props.isProfilePage ? `100%` : `auto`)};
+  height: 100%;
   width: ${(props) => props.screenWidth || `auto`};
   align-items: center;
-  padding: ${(props) => (props.isLoginPage ? `32px 0 144px` : `92px 0 78px`)};
+  padding: 92px 16px 0;
   background-color: #fff;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
 `;
 
-export default AuthSubContainer;
+export default ProfileSubContainer;

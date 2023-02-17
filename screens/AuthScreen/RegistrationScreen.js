@@ -20,13 +20,13 @@ import {
   AuthInput,
   AuthNavBtn,
   AuthNavText,
-  AuthNavLink,  
+  AuthNavLink,
 } from "../../ui/auth";
 
-import userPlaceholder from "../../assets/img/User_opt.jpg"
-import addAvatar from "../../assets/img/add_opt.png"
-import removeAvatar from "../../assets/img/remove_opt.png"
-import backgroundImg from "../../assets/img/backgroundPhoto_opt.jpg"
+import userPlaceholder from "../../assets/img/User_opt.jpg";
+import addAvatar from "../../assets/img/add_opt.png";
+import removeAvatar from "../../assets/img/remove_opt.png";
+import backgroundImg from "../../assets/img/backgroundPhoto_opt.jpg";
 
 const initialState = { avatar: "NO", name: "", email: "", password: "" };
 
@@ -37,15 +37,12 @@ const calculatedScreenWidth = `${Math.floor(
 export default function RegistrationScreen({ navigation }) {
   const [state, setState] = useState(initialState);
   const [avatarIsAdded, setAvatarIsAdded] = useState(false);
-  const [keyboardIsShown, setKeyboardIsShown] = useState(false);
 
   const [isNameInFocus, setIsNameInFocus] = useState(false);
   const [isEmailInFocus, setIsEmailInFocus] = useState(false);
   const [isPasswordInFocus, setIsPasswordInFocus] = useState(false);
 
   const avatarHandler = () => {
-    // console.log(avatarIsAdded);
-    // console.log(state.avatar);
     if (!avatarIsAdded) {
       setState((prevState) => ({ ...prevState, avatar: `YES` }));
       setAvatarIsAdded(!avatarIsAdded);
@@ -64,7 +61,6 @@ export default function RegistrationScreen({ navigation }) {
     setState((prevState) => ({ ...prevState, password: value }));
 
   const onInputFocus = (name) => {
-    setKeyboardIsShown(true);
     switch (name) {
       case "name":
         setIsNameInFocus(true);
@@ -100,7 +96,6 @@ export default function RegistrationScreen({ navigation }) {
 
   const onScreenPress = () => {
     Keyboard.dismiss();
-    setKeyboardIsShown(false);
   };
 
   const onRegister = () => {
@@ -118,16 +113,13 @@ export default function RegistrationScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={onScreenPress}>
       <AuthContainer>
-        <AuthBackground
-          source={backgroundImg}
-          keyboardIsShown={keyboardIsShown}
-        >
+        <AuthBackground source={backgroundImg}>
           <AuthSubContainer>
-            <AuthAvatarBtn
-              onPress={() => avatarHandler()}
-              activeOpacity={0.5}
-            >
-              <AuthAvatarBackground source={avatarIsAdded && userPlaceholder} isFilled={avatarIsAdded}></AuthAvatarBackground>
+            <AuthAvatarBtn onPress={() => avatarHandler()} activeOpacity={0.5}>
+              <AuthAvatarBackground
+                source={avatarIsAdded && userPlaceholder}
+                isFilled={avatarIsAdded}
+              ></AuthAvatarBackground>
               <AuthAvatarIcon
                 source={avatarIsAdded ? removeAvatar : addAvatar}
                 isFilled={avatarIsAdded}

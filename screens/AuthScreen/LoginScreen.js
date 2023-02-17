@@ -26,7 +26,10 @@ const calculatedScreenWidth = `${Math.floor(
   Dimensions.get("window").width - 32
 )}px`;
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation, route }) {
+
+  console.log(route.params);
+
   const [state, setState] = useState(initialState);
 
   const [isEmailInFocus, setIsEmailInFocus] = useState(false);
@@ -72,6 +75,7 @@ export default function LoginScreen({ navigation }) {
   const onLogin = () => {
     console.log("Credentials:", state);
     setState(initialState);
+    route.params.LogIn();
   };
 
   const onLinkPress = () => {

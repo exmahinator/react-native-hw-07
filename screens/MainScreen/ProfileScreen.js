@@ -19,6 +19,7 @@ import {
   PostsItemDetailsContainer,
   PostsItemIcon,
   PostsItemResponsesAmount,
+  ProfileSubContainer
 } from "../../ui/main";
 
 import backgroundImg from "../../assets/img/backgroundPhoto_opt.jpg";
@@ -37,7 +38,7 @@ export default function ProfileScreen() {
   return (
     <AuthContainer>
       <AuthBackground isProfilePage source={backgroundImg}>
-        <AuthSubContainer isProfilePage>
+        <ProfileSubContainer>
           <AuthAvatarBtn onPress={() => avatarHandler()} activeOpacity={0.5}>
             <AuthAvatarBackground
               source={userData.userAvatar}
@@ -103,7 +104,7 @@ export default function ProfileScreen() {
               }
             )}
           </PostsListContainer>
-        </AuthSubContainer>
+        </ProfileSubContainer>
       </AuthBackground>
     </AuthContainer>
   );

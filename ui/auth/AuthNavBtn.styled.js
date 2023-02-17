@@ -1,7 +1,7 @@
 import { TouchableOpacity } from "react-native";
 import styled from "styled-components";
 
-const AuthNavContainer = styled(TouchableOpacity)`
+const AuthNavBtn = styled(TouchableOpacity)`
   width: ${(props) => props.screenWidth || `auto`};
   background-color: #ff6c00;
   border-radius: 100px;
@@ -9,4 +9,4 @@ const AuthNavContainer = styled(TouchableOpacity)`
   margin-bottom: 16px;
 `;
 
-export default AuthNavContainer;
+export default AuthNavBtn;

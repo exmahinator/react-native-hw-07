@@ -6,6 +6,12 @@ import { Feather } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import {
+  PostsPseudoHeaderContainer,
+  PostsPseudoHeaderTitle,
+  PostsPseudoHeaderIcon,
+} from "./ui/pagesHeaders";
+
 import LoginScreen from "./screens/AuthScreen/LoginScreen";
 import RegistrationScreen from "./screens/AuthScreen/RegistrationScreen";
 
@@ -15,27 +21,56 @@ import ProfileScreen from "./screens/MainScreen/ProfileScreen";
 
 import { BottomTabIconContainer } from "./ui/routes";
 
-const AuthTab = createStackNavigator();
+const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
 
-export const useRoute = (isAuth) => {
-  if (!isAuth) {
+function MainScreenPseudoHeader() {
+  return (
+    <PostsPseudoHeaderContainer isPostsScreen>
+      <PostsPseudoHeaderTitle>Публікації</PostsPseudoHeaderTitle>
+    </PostsPseudoHeaderContainer>
+  );
+}
+
+function AddPostsScreenPseudoHeader() {
+  return (
+    <PostsPseudoHeaderContainer>
+      <PostsPseudoHeaderTitle>Створити публікацію</PostsPseudoHeaderTitle>
+    </PostsPseudoHeaderContainer>
+  );
+}
+
+export const useRoute = (props) => {
+  console.log(props);
+
+  function LogIn() {
+    console.log("Logging in");
+    props.authHandler();
+  }
+
+  function LogOut() {
+    console.log("Logging out");
+    props.authHandler();
+  }
+
+  if (!props.isAuthorized) {
     return (
-      <AuthTab.Navigator initialRouteName="Login">
-        <AuthTab.Screen
+      <AuthStack.Navigator initialRouteName="Login">
+        <AuthStack.Screen
           name="Login"
           options={{
             title: "Login screen",
             headerShown: false,
           }}
           component={LoginScreen}
+          initialParams={{LogIn: LogIn}}
         />
-        <AuthTab.Screen
+        <AuthStack.Screen
           name="Register"
           options={{ title: "Registration screen", headerShown: false }}
           component={RegistrationScreen}
         />
-      </AuthTab.Navigator>
+      </AuthStack.Navigator>
     );
   }
 
@@ -61,6 +96,15 @@ export const useRoute = (isAuth) => {
               </BottomTabIconContainer>
             );
           },
+          headerRight: () => (
+            <PostsPseudoHeaderIcon isPostsScreen onPress={LogOut}>
+              <Feather name="log-out" size={24} color="black" />
+            </PostsPseudoHeaderIcon>
+          ),
+          headerTitleStyle: {
+            textAlign: "center",
+          },
+          headerTitle: (props) => <MainScreenPseudoHeader {...props} />
         }}
       />
       <MainTab.Screen
@@ -74,6 +118,13 @@ export const useRoute = (isAuth) => {
               </BottomTabIconContainer>
             );
           },
+          tabBarStyle: { display: "none" },
+          headerLeft: () => (
+            <PostsPseudoHeaderIcon isNotPostsScreen>
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </PostsPseudoHeaderIcon>
+          ),
+          headerTitle: (props) => <AddPostsScreenPseudoHeader {...props} />
         }}
       />
       <MainTab.Screen

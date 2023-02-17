@@ -16,10 +16,8 @@ import {
 } from "../../ui/main";
 
 import userData from "../../testData/userData";
-import testImg01 from "../../assets/img/postsImg01_opt.jpg";
 import commentIcon from "../../assets/img/commentIcon_opt.png";
 import commentIconFilled from "../../assets/img/commentIconFilled_opt.png";
-import likeIcon from "../../assets/img/likeIconFilled_opt.png";
 import locationIcon from "../../assets/img/locationIcon_opt.png";
 
 export default function PostsScreen() {
@@ -37,24 +35,6 @@ export default function PostsScreen() {
         </PostsOwnerInfoContainer>
       </PostsOwnerContainer>
       <PostsListContainer>
-        {/* <PostsItemContainer>
-          <PostsItemImg source={testImg01}></PostsItemImg>
-          <PostsItemDescription>Ліс</PostsItemDescription>
-          <PostsItemSubContainer>
-            <PostsItemDetailsContainer>
-              <PostsItemIcon source={commentIcon}></PostsItemIcon>
-              <PostsItemResponsesAmount>0</PostsItemResponsesAmount>
-            </PostsItemDetailsContainer>
-            <PostsItemDetailsContainer>
-              <PostsItemIcon source={likeIcon}></PostsItemIcon>
-              <PostsItemResponsesAmount>0</PostsItemResponsesAmount>
-            </PostsItemDetailsContainer>
-            <PostsItemDetailsContainer>
-              <PostsItemIcon source={locationIcon}></PostsItemIcon>
-              <PostsItemResponsesAmount>Some location</PostsItemResponsesAmount>
-            </PostsItemDetailsContainer>
-          </PostsItemSubContainer>
-        </PostsItemContainer> */}
         {userData.userPosts.map(
           ({ id, image, description, comments, imgLocation }) => {
             const { amountOfComments } = comments;
