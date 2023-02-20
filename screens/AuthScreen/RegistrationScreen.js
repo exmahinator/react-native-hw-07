@@ -105,8 +105,6 @@ export default function RegistrationScreen({ navigation, route }) {
   const onRegister = () => {
     console.log("Register data:", state);
     setState(initialState);
-    // console.log("Initial state:", initialState);
-    // console.log("State after sending:", state);
     route.params.LogIn();
   };
 

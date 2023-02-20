@@ -23,12 +23,8 @@ import locationIcon from "../../assets/img/locationIcon_opt.png";
 
 export default function PostsScreen() {
   const navigation = useNavigation();
-  // console.log(userData);
 
   const navigateToComments = (id) => {
-    // console.log(id);
-    // console.log(comments);
-    // console.log("Clicking");
     navigation.navigate("Коментарі", { id });
   };
 

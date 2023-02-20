@@ -36,11 +36,7 @@ export default function CommentsScreen({ route }) {
   const onScreenPress = () => {
     Keyboard.dismiss();
   };
-  // console.log(userData.userPosts.find(id));
-  // console.log(id);
   const resultItem = userData.userPosts.find((post) => post.id === id);
-  // console.log(resultItem);
-  // console.log(resultItem.comments.comments.length);
   return (
     <TouchableWithoutFeedback onPress={onScreenPress}>
       <PostsContainer screenWidth={calculatedScreenWidth}>

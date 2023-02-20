@@ -12,18 +12,6 @@ export default function App() {
 
   const [isAuthorized, setIsAuthorized] = useState(false)
 
-  // const logIn = () => {
-  //   // setIsAuthorized(!isAuthorized);
-  //   console.log("clicking");
-  //   setIsAuthorized(true);
-  // }
-
-  // const logOut = () => {
-  //   // setIsAuthorized(!isAuthorized);
-  //   console.log("clicking");
-  //   setIsAuthorized(false);
-  // }
-
   const authHandler = () => {
     setIsAuthorized(!isAuthorized)
   }

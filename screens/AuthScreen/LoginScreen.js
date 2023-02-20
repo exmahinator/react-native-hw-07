@@ -28,8 +28,6 @@ const calculatedScreenWidth = `${Math.floor(
 
 export default function LoginScreen({ navigation, route }) {
 
-  // console.log(route.params);
-
   const [state, setState] = useState(initialState);
 
   const [isEmailInFocus, setIsEmailInFocus] = useState(false);
