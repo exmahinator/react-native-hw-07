@@ -10,6 +10,7 @@ const CreatePostsRemoveIconContainer = styled(TouchableOpacity)`
   height: 40px;
   width: 70px;
   border-radius: 20px;
+  align-self: center;
 `;
 
 export default CreatePostsRemoveIconContainer;

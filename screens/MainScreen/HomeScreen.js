@@ -14,6 +14,7 @@ import {
   PostsPseudoHeaderContainer,
   PostsPseudoHeaderTitle,
   PostsPseudoHeaderIcon,
+  PostsPseudoHeaderCommentsContainer
 } from "../../ui/pagesHeaders";
 import { BottomTabIconContainer } from "../../ui/routes";
 
@@ -32,6 +33,14 @@ function AddPostsScreenPseudoHeader() {
     <PostsPseudoHeaderContainer>
       <PostsPseudoHeaderTitle>Створити публікацію</PostsPseudoHeaderTitle>
     </PostsPseudoHeaderContainer>
+  );
+}
+
+function CommentsScreenPseudoHeader() {
+  return (
+    <PostsPseudoHeaderCommentsContainer>
+      <PostsPseudoHeaderTitle>Коментарі</PostsPseudoHeaderTitle>
+    </PostsPseudoHeaderCommentsContainer>
   );
 }
 
@@ -88,7 +97,7 @@ export default function HomeScreen({ LogOut }) {
           },
           tabBarStyle: { display: "none" },
           headerLeft: () => (
-            <PostsPseudoHeaderIcon isNotPostsScreen onPress={getBackToPosts}>
+            <PostsPseudoHeaderIcon isNotPostsScreen onPress={getBack}>
               <AntDesign name="arrowleft" size={24} color="#212121" />
             </PostsPseudoHeaderIcon>
           ),
@@ -125,7 +134,7 @@ export default function HomeScreen({ LogOut }) {
               <AntDesign name="arrowleft" size={24} color="#212121" />
             </PostsPseudoHeaderIcon>
           ),
-          headerTitle: (props) => <AddPostsScreenPseudoHeader {...props} />,
+          headerTitle: (props) => <CommentsScreenPseudoHeader {...props} />,
         }}
       />
     </MainTab.Navigator>
