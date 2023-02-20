@@ -10,8 +10,6 @@ import HomeScreen from "./screens/MainScreen/HomeScreen";
 const AuthStack = createStackNavigator();
 
 export const useRoute = (props) => {
-  // console.log(props);
-
   function LogIn() {
     console.log("Logging in");
     props.authHandler();
