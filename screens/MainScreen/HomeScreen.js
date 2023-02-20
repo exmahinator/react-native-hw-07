@@ -6,6 +6,7 @@ import PostsScreen from "./PostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import CommentsScreen from "./CommentsScreen";
+import MapScreen from "./MapScreen";
 
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -135,6 +136,23 @@ export default function HomeScreen({ LogOut }) {
             </PostsPseudoHeaderIcon>
           ),
           headerTitle: (props) => <CommentsScreenPseudoHeader {...props} />,
+        }}
+      />
+      <MainTab.Screen
+        name="Мапа"
+        component={MapScreen}
+        options={{
+          tabBarStyle: {
+            display: "none",
+          },
+          tabBarItemStyle: {
+            display: "none",
+          },
+          headerLeft: () => (
+            <PostsPseudoHeaderIcon isNotPostsScreen onPress={getBack}>
+              <AntDesign name="arrowleft" size={24} color="#212121" />
+            </PostsPseudoHeaderIcon>
+          ),
         }}
       />
     </MainTab.Navigator>

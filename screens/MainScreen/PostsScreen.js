@@ -28,6 +28,10 @@ export default function PostsScreen() {
     navigation.navigate("Коментарі", { id });
   };
 
+  const navigateToLocation = () => {
+    navigation.navigate("Мапа");
+  }
+
   return (
     <PostsContainer>
       <PostsOwnerContainer>
@@ -65,7 +69,7 @@ export default function PostsScreen() {
                       {amountOfComments}
                     </PostsItemResponsesAmount>
                   </PostsItemDetailsContainer>
-                  <PostsItemDetailsContainer flexGrow activeOpacity={0.5}>
+                  <PostsItemDetailsContainer onPress={() => navigateToLocation()} flexGrow activeOpacity={0.5}>
                     <PostsItemIcon source={locationIcon}></PostsItemIcon>
                     <PostsItemResponsesAmount
                       isLink

@@ -43,6 +43,10 @@ export default function ProfileScreen({ route }) {
     navigation.navigate("Коментарі", { id });
   };
 
+  const navigateToLocation = () => {
+    navigation.navigate("Мапа");
+  }
+
   return (
     <AuthContainer>
       <AuthBackground isProfilePage source={backgroundImg}>
@@ -100,7 +104,7 @@ export default function ProfileScreen({ route }) {
                           {amountOfLikes}
                         </PostsItemResponsesAmount>
                       </PostsItemDetailsContainer>
-                      <PostsItemDetailsContainer flexGrow activeOpacity={0.5}>
+                      <PostsItemDetailsContainer onPress={() => navigateToLocation()} flexGrow activeOpacity={0.5}>
                         <PostsItemIcon source={locationIcon}></PostsItemIcon>
                         <PostsItemResponsesAmount
                           isLink
