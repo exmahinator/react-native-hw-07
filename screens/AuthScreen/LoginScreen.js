@@ -28,7 +28,7 @@ const calculatedScreenWidth = `${Math.floor(
 
 export default function LoginScreen({ navigation, route }) {
 
-  console.log(route.params);
+  // console.log(route.params);
 
   const [state, setState] = useState(initialState);
 

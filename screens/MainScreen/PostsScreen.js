@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   PostsContainer,
   PostsOwnerContainer,
@@ -21,7 +22,16 @@ import commentIconFilled from "../../assets/img/commentIconFilled_opt.png";
 import locationIcon from "../../assets/img/locationIcon_opt.png";
 
 export default function PostsScreen() {
-  console.log(userData);
+  const navigation = useNavigation();
+  // console.log(userData);
+
+  const navigateToComments = (id) => {
+    // console.log(id);
+    // console.log(comments);
+    console.log("Clicking");
+    navigation.navigate("Коментарі", { id });
+  };
+
   return (
     <PostsContainer>
       <PostsOwnerContainer>
@@ -44,7 +54,10 @@ export default function PostsScreen() {
                 <PostsItemImg source={image}></PostsItemImg>
                 <PostsItemDescription>{description}</PostsItemDescription>
                 <PostsItemSubContainer>
-                  <PostsItemDetailsContainer activeOpacity={0.5}>
+                  <PostsItemDetailsContainer
+                    activeOpacity={0.5}
+                    onPress={() => navigateToComments(id)}
+                  >
                     <PostsItemIcon
                       source={
                         amountOfComments ? commentIconFilled : commentIcon

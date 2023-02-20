@@ -34,13 +34,15 @@ const calculatedScreenWidth = `${Math.floor(
   Dimensions.get("window").width - 32
 )}px`;
 
-export default function RegistrationScreen({ navigation }) {
+export default function RegistrationScreen({ navigation, route }) {
   const [state, setState] = useState(initialState);
   const [avatarIsAdded, setAvatarIsAdded] = useState(false);
 
   const [isNameInFocus, setIsNameInFocus] = useState(false);
   const [isEmailInFocus, setIsEmailInFocus] = useState(false);
   const [isPasswordInFocus, setIsPasswordInFocus] = useState(false);
+
+  const [keyboardIsShown, setKeyboardIsShown] = useState(false);
 
   const avatarHandler = () => {
     if (!avatarIsAdded) {
@@ -61,6 +63,7 @@ export default function RegistrationScreen({ navigation }) {
     setState((prevState) => ({ ...prevState, password: value }));
 
   const onInputFocus = (name) => {
+    setKeyboardIsShown(true);
     switch (name) {
       case "name":
         setIsNameInFocus(true);
@@ -96,13 +99,15 @@ export default function RegistrationScreen({ navigation }) {
 
   const onScreenPress = () => {
     Keyboard.dismiss();
+    setKeyboardIsShown(false);
   };
 
   const onRegister = () => {
     console.log("Register data:", state);
     setState(initialState);
-    console.log("Initial state:", initialState);
-    console.log("State after sending:", state);
+    // console.log("Initial state:", initialState);
+    // console.log("State after sending:", state);
+    route.params.LogIn();
   };
 
   const onLinkPress = () => {
@@ -113,7 +118,7 @@ export default function RegistrationScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={onScreenPress}>
       <AuthContainer>
-        <AuthBackground source={backgroundImg}>
+        <AuthBackground source={backgroundImg} keyboardIsShown={keyboardIsShown}>
           <AuthSubContainer>
             <AuthAvatarBtn onPress={() => avatarHandler()} activeOpacity={0.5}>
               <AuthAvatarBackground

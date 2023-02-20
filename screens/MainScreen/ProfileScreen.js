@@ -1,8 +1,8 @@
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   AuthContainer,
   AuthBackground,
-  AuthSubContainer,
   AuthAvatarBtn,
   AuthAvatarBackground,
   AuthAvatarIcon,
@@ -19,8 +19,11 @@ import {
   PostsItemDetailsContainer,
   PostsItemIcon,
   PostsItemResponsesAmount,
-  ProfileSubContainer
+  ProfileSubContainer,
+  ProfileLogOutBtn,
 } from "../../ui/main";
+
+import { Feather } from "@expo/vector-icons";
 
 import backgroundImg from "../../assets/img/backgroundPhoto_opt.jpg";
 import userData from "../../testData/userData";
@@ -30,15 +33,23 @@ import commentIconFilled from "../../assets/img/commentIconFilled_opt.png";
 import likeIcon from "../../assets/img/likeIconFilled_opt.png";
 import locationIcon from "../../assets/img/locationIcon_opt.png";
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ route }) {
+  const navigation = useNavigation();
   const avatarHandler = () => {
     console.log("Avatar will be removed shortly");
+  };
+
+  const navigateToComments = (id) => {
+    navigation.navigate("Коментарі", { id });
   };
 
   return (
     <AuthContainer>
       <AuthBackground isProfilePage source={backgroundImg}>
         <ProfileSubContainer>
+          <ProfileLogOutBtn onPress={() => route.params.LogOut()}>
+            <Feather name="log-out" size={24} color="#bdbdbd" />
+          </ProfileLogOutBtn>
           <AuthAvatarBtn onPress={() => avatarHandler()} activeOpacity={0.5}>
             <AuthAvatarBackground
               source={userData.userAvatar}
@@ -69,7 +80,7 @@ export default function ProfileScreen() {
                     <PostsItemImg source={image}></PostsItemImg>
                     <PostsItemDescription>{description}</PostsItemDescription>
                     <PostsItemSubContainer>
-                      <PostsItemDetailsContainer activeOpacity={0.5}>
+                      <PostsItemDetailsContainer onPress={() => navigateToComments(id)} activeOpacity={0.5}>
                         <PostsItemIcon
                           source={
                             amountOfComments ? commentIconFilled : commentIcon
