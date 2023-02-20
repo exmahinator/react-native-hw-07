@@ -36,19 +36,15 @@ export default function CommentsScreen({ route }) {
   const onScreenPress = () => {
     Keyboard.dismiss();
   };
-  // const resultItem = userData.userPosts.filter((post) => {post.id === id})
   // console.log(userData.userPosts.find(id));
   // console.log(id);
   const resultItem = userData.userPosts.find((post) => post.id === id);
-  console.log(resultItem);
-  console.log(resultItem.comments.comments.length);
-  // console.log(image);
+  // console.log(resultItem);
+  // console.log(resultItem.comments.comments.length);
   return (
     <TouchableWithoutFeedback onPress={onScreenPress}>
-      <PostsContainer>
+      <PostsContainer screenWidth={calculatedScreenWidth}>
         <PostsItemContainer>
-          {/* {resultItem.map(item => {return <PostsItemImg key={id} source={item.image}></PostsItemImg>})} */}
-          {/* <PostsItemImg></PostsItemImg>; */}
           <PostsItemImg isCommentPage source={testImg}></PostsItemImg>
           <CommentsContainer>
             {/* <CommentsSubContainer>
@@ -63,6 +59,19 @@ export default function CommentsScreen({ route }) {
               resultItem.comments.comments.map((comment) => {
                 const { id, owner, text, date } = comment;
                 const { name, avatar } = owner;
+                if (userData.name === name) {
+                  return (
+                    <CommentsSubContainer key={id}>
+                      <CommentsTextContainer isOwner>
+                        <CommentsText>{text}</CommentsText>
+                        <CommentsData>{date}</CommentsData>
+                      </CommentsTextContainer>
+                      <CommentsAvatarContainer isOwner
+                        source={avatar}
+                      ></CommentsAvatarContainer>
+                    </CommentsSubContainer>
+                  );
+                }
                 return (
                   <CommentsSubContainer key={id}>
                     <CommentsAvatarContainer

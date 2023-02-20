@@ -28,7 +28,7 @@ export default function PostsScreen() {
   const navigateToComments = (id) => {
     // console.log(id);
     // console.log(comments);
-    console.log("Clicking");
+    // console.log("Clicking");
     navigation.navigate("Коментарі", { id });
   };
 

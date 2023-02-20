@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const CommentsContainer = styled(ScrollView)`
     display: flex;
-    height: 280px;
+    height: 290px;
 `;
 
 export default CommentsContainer;
