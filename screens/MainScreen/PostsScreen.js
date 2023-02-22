@@ -21,7 +21,8 @@ import commentIcon from "../../assets/img/commentIcon_opt.png";
 import commentIconFilled from "../../assets/img/commentIconFilled_opt.png";
 import locationIcon from "../../assets/img/locationIcon_opt.png";
 
-export default function PostsScreen() {
+export default function PostsScreen({route}) {
+  console.log(route);
   const navigation = useNavigation();
 
   const navigateToComments = (id) => {

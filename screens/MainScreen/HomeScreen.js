@@ -45,7 +45,10 @@ function CommentsScreenPseudoHeader() {
   );
 }
 
-export default function HomeScreen({ LogOut }) {
+export default function HomeScreen(props) {
+  console.log(props);
+  const {LogOut} = props;
+  
   const navigation = useNavigation();
 
   const getBack = () => {

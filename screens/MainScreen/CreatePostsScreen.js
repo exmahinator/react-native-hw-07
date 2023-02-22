@@ -8,20 +8,18 @@ import {
   Platform,
 } from "react-native";
 
+import * as Location from "expo-location";
+
 import { EvilIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
 import noImgPlaceholder from "../../assets/img/postsScreenPlaceholderNoImage_opt.png";
 import withImgPlaceholder from "../../assets/img/postsScreenPlaceholderWithImage_opt.png";
 
-import testImg01 from "../../assets/img/postsImg01_opt.jpg";
-
 import {
   PostsContainer,
-  CreatePostsImgPlaceholderContainer,
-  CreatePostsImgPlaceholder,
-  CreatePostsImgPlaceholderIcon,
-  CreatePostsImg,
+  CreatePostsImgContainer,
+  CreatePostsImgIcon,
   CreatePostsInfo,
   CreatePostsInputContainer,
   CreatePostsInput,
@@ -30,16 +28,28 @@ import {
   CreatePostsSubmitText,
   CreatePostsLocationIconContainer,
   CreatePostsDetailsContainer,
+  CreatePostsImgSubContainer,
+  CreatePostsCameraView,
+  CreatePostsSnapBtn,
+  CreatePostsSnapPreview,
+  CreatePostsSnapPreviewContainer,
 } from "../../ui/main";
 
 const calculatedScreenWidth = `${Math.floor(
   Dimensions.get("window").width - 32
 )}px`;
 
-const initialState = { img: "Some Pic", name: "", location: "" };
+const initialState = {
+  uri: "",
+  name: "",
+  location: "",
+  latitude: "",
+  longitude: "",
+};
 
-export default function CreatePostsScreen() {
-  const [state, setState] = useState(initialState);
+export default function CreatePostsScreen({ navigation }) {
+  const [camera, setCamera] = useState(null);
+  const [photoData, setPhotoData] = useState(initialState);
   const [imgIsAdded, setImgIsAdded] = useState(false);
   const [isNameInFocus, setIsNameInFocus] = useState(false);
   const [isLocationInFocus, setIsLocationInFocus] = useState(false);
@@ -47,19 +57,38 @@ export default function CreatePostsScreen() {
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
 
   useEffect(() => {
-    if (state.img && state.name && state.location) {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (photoData.uri && photoData.name && photoData.location) {
       setSubmitIsDisabled(false);
     }
   });
 
-  const imgHandler = () => {
-    setImgIsAdded(!imgIsAdded);
+  const takePhoto = async () => {
+    setImgIsAdded(true);
+    const photo = await camera.takePictureAsync();
+    const location = await Location.getCurrentPositionAsync();
+    console.log(location);
+    setPhotoData((prevState) => ({
+      ...prevState,
+      uri: photo.uri,
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    }));
   };
 
   const nameHandler = (value) =>
-    setState((prevState) => ({ ...prevState, name: value }));
+    setPhotoData((prevState) => ({ ...prevState, name: value }));
   const locationHandler = (value) =>
-    setState((prevState) => ({ ...prevState, location: value }));
+    setPhotoData((prevState) => ({ ...prevState, location: value }));
 
   const onInputFocus = (name) => {
     setKeyboardIsShown(true);
@@ -96,14 +125,15 @@ export default function CreatePostsScreen() {
   };
 
   const removeData = () => {
-    setState(initialState);
+    setPhotoData(initialState);
     setSubmitIsDisabled(true);
     setImgIsAdded(false);
   };
 
   const onSubmit = () => {
-    console.log("Post data:", state);
-    setState(initialState);
+    console.log("Photo data:", photoData);
+    navigation.navigate("Публікації", { photoData });
+    setPhotoData(initialState);
     setSubmitIsDisabled(true);
     setImgIsAdded(false);
   };
@@ -111,24 +141,32 @@ export default function CreatePostsScreen() {
   return (
     <TouchableWithoutFeedback onPress={onScreenPress}>
       <PostsContainer keyboardIsShown={keyboardIsShown}>
-        <CreatePostsImgPlaceholderContainer onPress={imgHandler}>
-          <CreatePostsImgPlaceholder>
-            <CreatePostsImg source={imgIsAdded && testImg01}>
-              <CreatePostsImgPlaceholderIcon
-                source={imgIsAdded ? withImgPlaceholder : noImgPlaceholder}
-              ></CreatePostsImgPlaceholderIcon>
-            </CreatePostsImg>
-          </CreatePostsImgPlaceholder>
+        <CreatePostsImgContainer>
+          <CreatePostsImgSubContainer>
+            <CreatePostsCameraView ref={setCamera}></CreatePostsCameraView>
+          </CreatePostsImgSubContainer>
+          {photoData.uri !== "" && (
+            <CreatePostsSnapPreviewContainer>
+              <CreatePostsSnapPreview
+                source={{ uri: photoData.uri }}
+              ></CreatePostsSnapPreview>
+            </CreatePostsSnapPreviewContainer>
+          )}
+          <CreatePostsSnapBtn onPress={takePhoto}>
+            <CreatePostsImgIcon
+              source={imgIsAdded ? withImgPlaceholder : noImgPlaceholder}
+            ></CreatePostsImgIcon>
+          </CreatePostsSnapBtn>
           <CreatePostsInfo>
             {imgIsAdded ? "Редагувати фото" : "Завантажити фото"}
           </CreatePostsInfo>
-        </CreatePostsImgPlaceholderContainer>
+        </CreatePostsImgContainer>
         <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}>
           <CreatePostsDetailsContainer screenWidth={calculatedScreenWidth}>
             <CreatePostsInputContainer isInFocus={isNameInFocus}>
               <CreatePostsInput
                 placeholder="Назва..."
-                value={state.name}
+                value={photoData.name}
                 onChangeText={nameHandler}
                 onFocus={() => onInputFocus("name")}
                 onBlur={() => onInputBlur("name")}
@@ -141,7 +179,7 @@ export default function CreatePostsScreen() {
               </CreatePostsLocationIconContainer>
               <CreatePostsInput
                 placeholder="Місцина..."
-                value={state.location}
+                value={photoData.location}
                 onChangeText={locationHandler}
                 onFocus={() => onInputFocus("location")}
                 onBlur={() => onInputBlur("location")}
