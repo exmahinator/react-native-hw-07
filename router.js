@@ -1,6 +1,7 @@
 import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
+import { useDispatch } from "react-redux";
 
 import LoginScreen from "./screens/AuthScreen/LoginScreen";
 import RegistrationScreen from "./screens/AuthScreen/RegistrationScreen";
@@ -10,6 +11,12 @@ import HomeScreen from "./screens/MainScreen/HomeScreen";
 const AuthStack = createStackNavigator();
 
 export const useRoute = (props) => {
+
+  // console.log("Props:", props.user.email);
+  console.log("Props:", props);
+
+  const {user} = props;
+
   function LogIn() {
     console.log("Logging in");
     props.authHandler();
@@ -20,7 +27,7 @@ export const useRoute = (props) => {
     props.authHandler();
   }
 
-  if (!props.isAuthorized) {
+  if (!user) {
     return (
       <AuthStack.Navigator initialRouteName="Login">
         <AuthStack.Screen
@@ -30,17 +37,15 @@ export const useRoute = (props) => {
             headerShown: false,
           }}
           component={LoginScreen}
-          initialParams={{ LogIn: LogIn }}
         />
         <AuthStack.Screen
           name="Register"
           options={{ title: "Registration screen", headerShown: false }}
           component={RegistrationScreen}
-          initialParams={{ LogIn: LogIn }}
         />
       </AuthStack.Navigator>
     );
   }
 
-  return <HomeScreen LogOut={LogOut}/>;
+  return <HomeScreen user={user}/>;
 };

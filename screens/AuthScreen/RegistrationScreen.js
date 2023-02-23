@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { useDispatch } from "react-redux";
 
 import {
   AuthContainer,
@@ -23,18 +24,21 @@ import {
   AuthNavLink,
 } from "../../ui/auth";
 
+import { authSignUpUser } from "../../redux/auth/authOperations";
+
 import userPlaceholder from "../../assets/img/User_opt.jpg";
 import addAvatar from "../../assets/img/add_opt.png";
 import removeAvatar from "../../assets/img/remove_opt.png";
 import backgroundImg from "../../assets/img/backgroundPhoto_opt.jpg";
 
-const initialState = { avatar: "NO", name: "", email: "", password: "" };
+// const initialState = { avatar: "NO", name: "", email: "", password: "" };
+const initialState = { nickname: "", email: "", password: "" };
 
 const calculatedScreenWidth = `${Math.floor(
   Dimensions.get("window").width - 32
 )}px`;
 
-export default function RegistrationScreen({ navigation, route }) {
+export default function RegistrationScreen({ navigation }) {
   const [state, setState] = useState(initialState);
   const [avatarIsAdded, setAvatarIsAdded] = useState(false);
 
@@ -43,6 +47,8 @@ export default function RegistrationScreen({ navigation, route }) {
   const [isPasswordInFocus, setIsPasswordInFocus] = useState(false);
 
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
+
+  const dispatch = useDispatch();
 
   const avatarHandler = () => {
     if (!avatarIsAdded) {
@@ -56,7 +62,7 @@ export default function RegistrationScreen({ navigation, route }) {
   };
 
   const nameHandler = (value) =>
-    setState((prevState) => ({ ...prevState, name: value }));
+    setState((prevState) => ({ ...prevState, nickname: value }));
   const emailHandler = (value) =>
     setState((prevState) => ({ ...prevState, email: value }));
   const passwordHandler = (value) =>
@@ -104,8 +110,8 @@ export default function RegistrationScreen({ navigation, route }) {
 
   const onRegister = () => {
     console.log("Register data:", state);
+    dispatch(authSignUpUser(state))
     setState(initialState);
-    route.params.LogIn();
   };
 
   const onLinkPress = () => {
@@ -116,9 +122,13 @@ export default function RegistrationScreen({ navigation, route }) {
   return (
     <TouchableWithoutFeedback onPress={onScreenPress}>
       <AuthContainer>
-        <AuthBackground source={backgroundImg} keyboardIsShown={keyboardIsShown}>
+        <AuthBackground
+          source={backgroundImg}
+          keyboardIsShown={keyboardIsShown}
+        >
           <AuthSubContainer>
-            <AuthAvatarBtn onPress={() => avatarHandler()} activeOpacity={0.5}>
+            {/* <AuthAvatarBtn onPress={() => avatarHandler()} activeOpacity={0.5}> */}
+            <AuthAvatarBtn activeOpacity={0.5}>
               <AuthAvatarBackground
                 source={avatarIsAdded && userPlaceholder}
                 isFilled={avatarIsAdded}
@@ -137,7 +147,7 @@ export default function RegistrationScreen({ navigation, route }) {
             >
               <AuthInputContainer screenWidth={calculatedScreenWidth}>
                 <AuthInput
-                  value={state.name}
+                  value={state.nickname}
                   onChangeText={nameHandler}
                   placeholder="Ваше ім'я"
                   onFocus={() => onInputFocus("name")}

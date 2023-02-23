@@ -1,6 +1,8 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { authSignOutUser } from "../../redux/auth/authOperations";
 
 import PostsScreen from "./PostsScreen";
 import ProfileScreen from "./ProfileScreen";
@@ -18,6 +20,7 @@ import {
   PostsPseudoHeaderCommentsContainer
 } from "../../ui/pagesHeaders";
 import { BottomTabIconContainer } from "../../ui/routes";
+
 
 const MainTab = createBottomTabNavigator();
 
@@ -46,8 +49,13 @@ function CommentsScreenPseudoHeader() {
 }
 
 export default function HomeScreen(props) {
-  console.log(props);
-  const {LogOut} = props;
+  console.log("HomePage props:", props.user);
+  // const {LogOut} = props;
+  const dispatch = useDispatch();
+
+  const LogOut = () => {
+    dispatch(authSignOutUser())
+  }
   
   const navigation = useNavigation();
 

@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { useDispatch } from "react-redux";
 
 import {
   AuthContainer,
@@ -20,18 +21,22 @@ import {
   AuthNavLink,
 } from "../../ui/auth";
 
+import { authSignInUser } from "../../redux/auth/authOperations";
+
 const initialState = { email: "", password: "" };
 
 const calculatedScreenWidth = `${Math.floor(
   Dimensions.get("window").width - 32
 )}px`;
 
-export default function LoginScreen({ navigation, route }) {
+export default function LoginScreen({ navigation}) {
 
   const [state, setState] = useState(initialState);
 
   const [isEmailInFocus, setIsEmailInFocus] = useState(false);
   const [isPasswordInFocus, setIsPasswordInFocus] = useState(false);
+
+  const dispatch = useDispatch();
 
   const emailHandler = (value) =>
     setState((prevState) => ({ ...prevState, email: value }));
@@ -72,8 +77,8 @@ export default function LoginScreen({ navigation, route }) {
 
   const onLogin = () => {
     console.log("Credentials:", state);
+    dispatch(authSignInUser(state))
     setState(initialState);
-    route.params.LogIn();
   };
 
   const onLinkPress = () => {
