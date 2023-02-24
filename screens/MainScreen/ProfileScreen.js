@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { authSignOutUser } from "../../redux/auth/authOperations";
 import {
   AuthContainer,
   AuthBackground,
@@ -33,8 +35,10 @@ import commentIconFilled from "../../assets/img/commentIconFilled_opt.png";
 import likeIcon from "../../assets/img/likeIconFilled_opt.png";
 import locationIcon from "../../assets/img/locationIcon_opt.png";
 
-export default function ProfileScreen({ route }) {
+export default function ProfileScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const avatarHandler = () => {
     console.log("Avatar will be removed shortly");
   };
@@ -51,7 +55,7 @@ export default function ProfileScreen({ route }) {
     <AuthContainer>
       <AuthBackground isProfilePage source={backgroundImg}>
         <ProfileSubContainer>
-          <ProfileLogOutBtn onPress={() => route.params.LogOut()}>
+          <ProfileLogOutBtn onPress={() => dispatch(authSignOutUser())}>
             <Feather name="log-out" size={24} color="#bdbdbd" />
           </ProfileLogOutBtn>
           <AuthAvatarBtn onPress={() => avatarHandler()} activeOpacity={0.5}>

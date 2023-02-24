@@ -10,24 +10,9 @@ import HomeScreen from "./screens/MainScreen/HomeScreen";
 
 const AuthStack = createStackNavigator();
 
-export const useRoute = (props) => {
-
-  // console.log("Props:", props.user.email);
-  console.log("Props:", props);
-
-  const {user} = props;
-
-  function LogIn() {
-    console.log("Logging in");
-    props.authHandler();
-  }
-
-  function LogOut() {
-    console.log("Logging out");
-    props.authHandler();
-  }
-
-  if (!user) {
+export const useRoute = ({stateChange}) => {
+  // console.log("Router stateChange:", stateChange);
+  if (!stateChange) {
     return (
       <AuthStack.Navigator initialRouteName="Login">
         <AuthStack.Screen
@@ -47,5 +32,5 @@ export const useRoute = (props) => {
     );
   }
 
-  return <HomeScreen user={user}/>;
+  return <HomeScreen />;
 };

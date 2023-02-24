@@ -10,6 +10,8 @@ import {
 
 import * as Location from "expo-location";
 
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 import { EvilIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -130,8 +132,30 @@ export default function CreatePostsScreen({ navigation }) {
     setImgIsAdded(false);
   };
 
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photoData.uri);
+    console.log("Response at CreatePosts:", response);
+    const file = await response.blob();
+    console.log("File at CreatePosts after response:", file);
+
+    const uniquePostID = Date.now().toString();
+
+    const storage = await getStorage();
+    const resultRef = await ref(storage, `images/${uniquePostID}`);
+    await uploadBytes(resultRef, file);
+
+    // const processedPhoto = await ref(storage, `images/${uniquePostID}`);
+
+    const photoDownloadURL = await getDownloadURL(
+      ref(storage, `images/${uniquePostID}`)
+    );
+    console.log("Result photo:", photoDownloadURL);
+  };
+
   const onSubmit = () => {
     console.log("Photo data:", photoData);
+    uploadPhotoToServer();
+
     navigation.navigate("Публікації", { photoData });
     setPhotoData(initialState);
     setSubmitIsDisabled(true);

@@ -48,14 +48,16 @@ function CommentsScreenPseudoHeader() {
   );
 }
 
-export default function HomeScreen(props) {
-  console.log("HomePage props:", props.user);
+export default function HomeScreen() {
+  // console.log("HomePage props:", props.user);
+  // console.log("HomePage user name:", props.user.displayName);
+  // console.log("HomePage user id:", props.user.uid);
   // const {LogOut} = props;
   const dispatch = useDispatch();
 
-  const LogOut = () => {
-    dispatch(authSignOutUser())
-  }
+  // const LogOut = () => {
+  //   dispatch(authSignOutUser())
+  // }
   
   const navigation = useNavigation();
 
@@ -86,7 +88,7 @@ export default function HomeScreen(props) {
             );
           },
           headerRight: () => (
-            <PostsPseudoHeaderIcon isPostsScreen onPress={LogOut}>
+            <PostsPseudoHeaderIcon isPostsScreen onPress={() => dispatch(authSignOutUser())}>
               <Feather name="log-out" size={24} color="#bdbdbd" />
             </PostsPseudoHeaderIcon>
           ),
@@ -129,7 +131,6 @@ export default function HomeScreen(props) {
           },
         }}
         component={ProfileScreen}
-        initialParams={{ LogOut }}
       />
       <MainTab.Screen
         name="Коментарі"
