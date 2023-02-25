@@ -31,14 +31,36 @@ export default function PostsScreen() {
     getAllPosts();
   }, []);
 
+  const getComments = async (id) => {
+    var counter = 0;
+    const colRef = collection(db, "posts", id, "comments");
+    const docsSnap = await getDocs(colRef);
+
+    docsSnap.forEach((doc) => {
+      // const comment = doc.data()
+      // console.log(`Total comments of ${id}: ${doc.id} => ${doc.data()}`);
+      counter = counter + 1;
+      // console.log("Total comments:", counter);
+      // setComments((prevState) => [...prevState, { commentId: doc.id, ...comment }]);
+    });
+
+    // console.log("Counter out of forEach function:", counter);
+    // console.log(`Total comments of ${id}: ${comments.length}`);
+    return counter
+  };
+
   const getAllPosts = async () => {
     const querySnapshot = await getDocs(collection(db, "posts"));
 
-    await querySnapshot.forEach((doc) => {
+    await querySnapshot.forEach(async (doc) => {
       const { id } = doc;
+      const totalComments = await getComments(id);
+      // const totalComments = getComments(id);
+      // console.log("TotalComments of one Post:", totalComments);
+      // const commentsLength = comments.length;
       const postData = doc.data();
 
-      setPosts((prevState) => [...prevState, { id, ...postData }]);
+      setPosts((prevState) => [...prevState, { id, ...postData, totalComments }]);
     });
   };
 
@@ -67,7 +89,7 @@ export default function PostsScreen() {
       <PostsListContainer>
         {posts.length > 0 &&
           posts.map(
-            ({ id, photo: uri, comment, location, latitude, longitude }) => {
+            ({ id, photo: uri, comment, location, latitude, longitude, totalComments }) => {
               // console.log("My post ID inside PostsScreen:", id);
               return (
                 <PostsItemContainer key={id}>
@@ -78,9 +100,9 @@ export default function PostsScreen() {
                       activeOpacity={0.5}
                       onPress={() => navigateToComments(id, uri)}
                     >
-                      <PostsItemIcon source={commentIcon}></PostsItemIcon>
-                      <PostsItemResponsesAmount textIsHighlighted={false}>
-                        {0}
+                      <PostsItemIcon source={totalComments ? commentIconFilled : commentIcon}></PostsItemIcon>
+                      <PostsItemResponsesAmount textIsHighlighted={totalComments !== 0}>
+                        {totalComments}
                       </PostsItemResponsesAmount>
                     </PostsItemDetailsContainer>
                     <PostsItemDetailsContainer
