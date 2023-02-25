@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Dimensions,
@@ -32,11 +32,17 @@ const calculatedScreenWidth = `${Math.floor(
 )}px`;
 
 export default function CommentsScreen({ route }) {
+  const [comment, setComment] = useState("");
   const { id } = route.params;
   const onScreenPress = () => {
     Keyboard.dismiss();
   };
   const resultItem = userData.userPosts.find((post) => post.id === id);
+
+  const sendComment = () => {
+    console.log("Sending a comment...");
+  };
+
   return (
     <TouchableWithoutFeedback onPress={onScreenPress}>
       <PostsContainer screenWidth={calculatedScreenWidth}>
@@ -44,14 +50,15 @@ export default function CommentsScreen({ route }) {
           <PostsItemImg isCommentPage source={testImg}></PostsItemImg>
           <CommentsContainer>
             {/* <CommentsSubContainer>
-          <CommentsAvatarContainer></CommentsAvatarContainer>
-          <CommentsTextContainer>
-            <CommentsText>Some text</CommentsText>
-            <CommentsData>Some data</CommentsData>
-          </CommentsTextContainer>
-        </CommentsSubContainer> */}
+              <CommentsAvatarContainer></CommentsAvatarContainer>
+              <CommentsTextContainer>
+                <CommentsText>Some text</CommentsText>
+                <CommentsData>Some data</CommentsData>
+              </CommentsTextContainer>
+            </CommentsSubContainer> */}
 
-            {resultItem.comments.comments.length > 0 &&
+            {resultItem &&
+              resultItem.comments.comments.length > 0 &&
               resultItem.comments.comments.map((comment) => {
                 const { id, owner, text, date } = comment;
                 const { name, avatar } = owner;
@@ -62,7 +69,8 @@ export default function CommentsScreen({ route }) {
                         <CommentsText>{text}</CommentsText>
                         <CommentsData>{date}</CommentsData>
                       </CommentsTextContainer>
-                      <CommentsAvatarContainer isOwner
+                      <CommentsAvatarContainer
+                        isOwner
                         source={avatar}
                       ></CommentsAvatarContainer>
                     </CommentsSubContainer>
@@ -86,7 +94,7 @@ export default function CommentsScreen({ route }) {
           >
             <CommentsInputContainer>
               <CommentsInput placeholder="Коментувати..."></CommentsInput>
-              <CommentsSendBtn>
+              <CommentsSendBtn onPress={sendComment}>
                 <Feather name="arrow-up" size={24} color="#fff" />
               </CommentsSendBtn>
             </CommentsInputContainer>

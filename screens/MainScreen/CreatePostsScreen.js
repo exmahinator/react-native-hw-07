@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import {
   Dimensions,
@@ -10,7 +11,9 @@ import {
 
 import * as Location from "expo-location";
 
+import db from "../../friebase/config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { doc, setDoc, addDoc, collection } from "firebase/firestore";
 
 import { EvilIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -43,7 +46,7 @@ const calculatedScreenWidth = `${Math.floor(
 
 const initialState = {
   uri: "",
-  name: "",
+  comment: "",
   location: "",
   latitude: "",
   longitude: "",
@@ -53,10 +56,19 @@ export default function CreatePostsScreen({ navigation }) {
   const [camera, setCamera] = useState(null);
   const [photoData, setPhotoData] = useState(initialState);
   const [imgIsAdded, setImgIsAdded] = useState(false);
-  const [isNameInFocus, setIsNameInFocus] = useState(false);
+  const [isCommentInFocus, setIsCommentInFocus] = useState(false);
   const [isLocationInFocus, setIsLocationInFocus] = useState(false);
   const [submitIsDisabled, setSubmitIsDisabled] = useState(true);
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
+
+  // const { userId, nickname } = useSelector((state) => {
+  //   state.auth;
+  // });
+
+  const { userId, nickname } = useSelector((state) => {
+    console.log(state.auth);
+    return state.auth;
+  });
 
   useEffect(() => {
     (async () => {
@@ -69,7 +81,7 @@ export default function CreatePostsScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
-    if (photoData.uri && photoData.name && photoData.location) {
+    if (photoData.uri && photoData.comment && photoData.location) {
       setSubmitIsDisabled(false);
     }
   });
@@ -87,16 +99,16 @@ export default function CreatePostsScreen({ navigation }) {
     }));
   };
 
-  const nameHandler = (value) =>
-    setPhotoData((prevState) => ({ ...prevState, name: value }));
+  const commentHandler = (value) =>
+    setPhotoData((prevState) => ({ ...prevState, comment: value }));
   const locationHandler = (value) =>
     setPhotoData((prevState) => ({ ...prevState, location: value }));
 
   const onInputFocus = (name) => {
     setKeyboardIsShown(true);
     switch (name) {
-      case "name":
-        setIsNameInFocus(true);
+      case "comment":
+        setIsCommentInFocus(true);
         break;
       case "location":
         setIsLocationInFocus(true);
@@ -109,8 +121,8 @@ export default function CreatePostsScreen({ navigation }) {
 
   const onInputBlur = (name) => {
     switch (name) {
-      case "name":
-        setIsNameInFocus(false);
+      case "comment":
+        setIsCommentInFocus(false);
         break;
       case "location":
         setIsLocationInFocus(false);
@@ -144,17 +156,32 @@ export default function CreatePostsScreen({ navigation }) {
     const resultRef = await ref(storage, `images/${uniquePostID}`);
     await uploadBytes(resultRef, file);
 
-    // const processedPhoto = await ref(storage, `images/${uniquePostID}`);
-
     const photoDownloadURL = await getDownloadURL(
       ref(storage, `images/${uniquePostID}`)
     );
     console.log("Result photo:", photoDownloadURL);
+
+    return photoDownloadURL;
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+    const { comment, location, latitude, longitude } = photoData;
+    const createPosts = await addDoc(collection(db, "posts"), {
+      photo,
+      comment,
+      location,
+      latitude,
+      longitude,
+      userId,
+      nickname,
+    });
+    console.log("Created post:", createPosts);
   };
 
   const onSubmit = () => {
     console.log("Photo data:", photoData);
-    uploadPhotoToServer();
+    uploadPostToServer();
 
     navigation.navigate("Публікації", { photoData });
     setPhotoData(initialState);
@@ -187,14 +214,14 @@ export default function CreatePostsScreen({ navigation }) {
         </CreatePostsImgContainer>
         <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}>
           <CreatePostsDetailsContainer screenWidth={calculatedScreenWidth}>
-            <CreatePostsInputContainer isInFocus={isNameInFocus}>
+            <CreatePostsInputContainer isInFocus={isCommentInFocus}>
               <CreatePostsInput
                 placeholder="Назва..."
-                value={photoData.name}
-                onChangeText={nameHandler}
-                onFocus={() => onInputFocus("name")}
-                onBlur={() => onInputBlur("name")}
-                isInFocus={isNameInFocus}
+                value={photoData.comment}
+                onChangeText={commentHandler}
+                onFocus={() => onInputFocus("comment")}
+                onBlur={() => onInputBlur("comment")}
+                isInFocus={isCommentInFocus}
               />
             </CreatePostsInputContainer>
             <CreatePostsInputContainer isInFocus={isLocationInFocus} isLastItem>

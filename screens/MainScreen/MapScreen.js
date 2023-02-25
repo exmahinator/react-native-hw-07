@@ -6,20 +6,22 @@ import {
   MapScreenMarker,
 } from "../../ui/main";
 
-export default function MapScreen() {
+export default function MapScreen({ route }) {
+  console.log("Info from route:", route);
+  const { latitude, longitude } = route.params;
+  console.log("Latitude at MapScreen:", latitude);
+  console.log("Longitude at MapScreen:", longitude);
   return (
     <MapScreenContainer>
       <MapScreenView
-        initialRegion={{
-          latitude: 50.450001,
-          longitude: 30.523333,
+        region={{
+          latitude,
+          longitude,
           latitudeDelta: 0.09,
           longitudeDelta: 0.04,
         }}
       >
-        <MapScreenMarker
-          coordinate={{ latitude: 50.450001, longitude: 30.523333 }}
-        ></MapScreenMarker>
+        <MapScreenMarker coordinate={{ latitude, longitude }}></MapScreenMarker>
       </MapScreenView>
     </MapScreenContainer>
   );
