@@ -52,11 +52,7 @@ export default function CommentsScreen({ route }) {
 
   useEffect(() => {
     getAllComments();
-    // console.log("MyState:", posts);
-  }, []);
-
-  // console.log("My post ID:", id);
-  // console.log("Commentator nickname:", nickname);
+  }, [id]);
   const onScreenPress = () => {
     Keyboard.dismiss();
   };
@@ -66,72 +62,26 @@ export default function CommentsScreen({ route }) {
     const colRef = collection(db, "posts", id, "comments");
     const docsSnap = await getDocs(colRef);
     docsSnap.forEach((doc) => {
-      // const { id } = doc;
       const commentData = doc.data();
-      // const resultComment = {id, ...commentData}
       const resultComment = { ...commentData };
       console.log("resultComment:", resultComment);
-      // setAllComments((prevState) => [...prevState, { id, ...commentData }]);
-      // console.log("id:", id);
-      // console.log(doc.data());
 
-      const isExist = allComments.find((comment) => comment.id === doc.id);
-
-      if (isExist) {
-        return;
-      }
+      // const isExist = allComments.find((comment) => comment.id === doc.id);
+      // if (isExist) {
+      //   return;
+      // }
 
       setAllComments((prevState) => [...prevState, resultComment]);
-      // console.log("AllComments:", allComments);
     });
-    // const docRef = doc(db, "posts", id);
-    // const colRef = collection(docRef, "comments");
-    // const colSnap = await getDoc(colRef);
-    // console.log("All comments:", colSnap.data());
-
-    // const docRef = doc(db, "posts", id);
-    // const colRef = collection(docRef, "comments");
-    // const querySnapshot = await getDocs(
-    //   collection(db, "posts", id, "comments")
-    // );
-    // await querySnapshot.forEach((doc) => {
-    //   const { id, comment, nickname } = doc;
-    //   setAllComments((prevState) => [...prevState, { id, comment, nickname }]);
-    //   console.log("AllComments:", allComments);
-    // });
   };
 
   console.log("AllComments:", allComments);
 
   const sendComment = async () => {
     const resultComment = { comment, nickname };
-
-    // const docRef = doc(db, "posts", id, "comments");
-
     const docRef = doc(db, "posts", id);
     const colRef = collection(docRef, "comments");
     addDoc(colRef, resultComment);
-
-    // const docSnap = await getDoc(docRef);
-    // const result = docSnap.data();
-    // console.log("Current post after data() method:", result);
-
-    // setDoc(docRef, resultComment);
-
-    // setDoc(docRef, resultComment, { merge: true });
-
-    // console.log("Current post before getDoc:", docRef);
-    // const docSnap = await getDoc(docRef);
-    // console.log("Current post after getDoc:", docSnap);
-    // const result = docSnap.data();
-    // console.log("Current post after data() method:", result);
-
-    // const docRef = ref(db, "posts");
-    // console.log("My Ref:", docRef);
-    // const myPost = doc(id);
-    // console.log("My post on Firebase:", myPost);
-    // console.log("Our comment:", comment);
-    // console.log("Sending a comment...");
     setComment("");
   };
 

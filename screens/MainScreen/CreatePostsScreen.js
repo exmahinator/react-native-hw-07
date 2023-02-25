@@ -61,10 +61,6 @@ export default function CreatePostsScreen({ navigation }) {
   const [submitIsDisabled, setSubmitIsDisabled] = useState(true);
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
 
-  // const { userId, nickname } = useSelector((state) => {
-  //   state.auth;
-  // });
-
   const { userId, nickname } = useSelector((state) => {
     console.log(state.auth);
     return state.auth;

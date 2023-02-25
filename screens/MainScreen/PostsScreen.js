@@ -29,44 +29,17 @@ export default function PostsScreen() {
 
   useEffect(() => {
     getAllPosts();
-    // console.log("MyState:", posts);
   }, []);
 
   const getAllPosts = async () => {
     const querySnapshot = await getDocs(collection(db, "posts"));
-    // const querySnapshot = await getDocs(collection(db, "cities"));
-    // querySnapshot.forEach((doc) => {
-    //   // doc.data() is never undefined for query doc snapshots
-    //   console.log(doc.id, " => ", doc.data());
-    // });
 
     await querySnapshot.forEach((doc) => {
-      // console.log(doc.id, " => ", doc.data());
       const { id } = doc;
       const postData = doc.data();
 
-      const isExist = posts.find((post) => post.id === doc.id);
-
-      if (isExist) {
-        return;
-      }
-      // console.log("MyPostData:", postData);
       setPosts((prevState) => [...prevState, { id, ...postData }]);
-
-      // console.log("MyStateOnEachIteration:", posts);
     });
-
-    // querySnapshot.forEach((doc) => {
-    //   console.log(doc.id, " => ", doc.data());
-    // });
-
-    // setPosts(querySnapshot.map((doc) => ({ ...doc.data(), id: doc.id })));
-
-    // setPosts(querySnapshot.forEach((doc) => ({ ...doc.data(), id: doc.id })));
-
-    // console.log("My posts:", posts);
-
-    // console.log("Result from firebase db:", querySnapshot);
   };
 
   const navigateToComments = (id, uri) => {
@@ -74,11 +47,10 @@ export default function PostsScreen() {
   };
 
   const navigateToLocation = (latitude, longitude) => {
-    // console.log("Latitude and longitude:", latitude, longitude);
     navigation.navigate("Мапа", { latitude, longitude });
   };
 
-  // console.log("MyState:", posts);
+  console.log("MyState:", posts);
 
   return (
     <PostsContainer>
