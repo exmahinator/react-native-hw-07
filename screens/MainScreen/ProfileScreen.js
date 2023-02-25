@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authSignOutUser } from "../../redux/auth/authOperations";
+import db from "../../friebase/config";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import {
   AuthContainer,
   AuthBackground,
@@ -39,6 +41,29 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
+  const { userId } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    getUserPosts();
+  }, []);
+
+  const getUserPosts = async () => {
+    // const colRef = collection(db, "posts");
+    // const q = query(colRef, where("userId", "==", userId));
+    const q = query(collection(db, "posts"), where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      console.log("Doc inside profile:", doc.data());
+      // const userPosts = doc.data()
+      // console.log(`Current account posts: ${userPosts}`);
+    });
+    // console.log(
+    //   querySnapshot.forEach((doc) => {return ({
+    //     ...doc.data(),
+    //   })})
+    // );
+  };
+
   const avatarHandler = () => {
     console.log("Avatar will be removed shortly");
   };
@@ -49,7 +74,7 @@ export default function ProfileScreen() {
 
   const navigateToLocation = () => {
     navigation.navigate("Мапа");
-  }
+  };
 
   return (
     <AuthContainer>
@@ -88,7 +113,10 @@ export default function ProfileScreen() {
                     <PostsItemImg source={image}></PostsItemImg>
                     <PostsItemDescription>{description}</PostsItemDescription>
                     <PostsItemSubContainer>
-                      <PostsItemDetailsContainer onPress={() => navigateToComments(id)} activeOpacity={0.5}>
+                      <PostsItemDetailsContainer
+                        onPress={() => navigateToComments(id)}
+                        activeOpacity={0.5}
+                      >
                         <PostsItemIcon
                           source={
                             amountOfComments ? commentIconFilled : commentIcon
@@ -108,7 +136,11 @@ export default function ProfileScreen() {
                           {amountOfLikes}
                         </PostsItemResponsesAmount>
                       </PostsItemDetailsContainer>
-                      <PostsItemDetailsContainer onPress={() => navigateToLocation()} flexGrow activeOpacity={0.5}>
+                      <PostsItemDetailsContainer
+                        onPress={() => navigateToLocation()}
+                        flexGrow
+                        activeOpacity={0.5}
+                      >
                         <PostsItemIcon source={locationIcon}></PostsItemIcon>
                         <PostsItemResponsesAmount
                           isLink
