@@ -48,17 +48,24 @@ export default function CommentsScreen({ route }) {
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
   const { id, uri } = route.params;
+  // const [postId, setPostId] = useState("");
   const { nickname } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    getAllComments();
+    getAllComments(id);
+    return () => {
+      setAllComments([]);
+    };
   }, [id]);
+
   const onScreenPress = () => {
     Keyboard.dismiss();
   };
+
   const resultItem = userData.userPosts.find((post) => post.id === id);
 
-  const getAllComments = async () => {
+  const getAllComments = async (id) => {
+    console.log("PostID at CommentScreen:", id);
     const colRef = collection(db, "posts", id, "comments");
     const docsSnap = await getDocs(colRef);
     docsSnap.forEach((doc) => {
