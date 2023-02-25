@@ -50,7 +50,7 @@ export default function PostsScreen() {
     navigation.navigate("Мапа", { latitude, longitude });
   };
 
-  console.log("MyState:", posts);
+  // console.log("MyState:", posts);
 
   return (
     <PostsContainer>
@@ -68,7 +68,7 @@ export default function PostsScreen() {
         {posts.length > 0 &&
           posts.map(
             ({ id, photo: uri, comment, location, latitude, longitude }) => {
-              console.log("My post ID inside PostsScreen:", id);
+              // console.log("My post ID inside PostsScreen:", id);
               return (
                 <PostsItemContainer key={id}>
                   <PostsItemImg source={{ uri }}></PostsItemImg>

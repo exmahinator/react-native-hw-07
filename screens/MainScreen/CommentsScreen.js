@@ -48,14 +48,12 @@ export default function CommentsScreen({ route }) {
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
   const { id, uri } = route.params;
-  // const [postId, setPostId] = useState("");
+
   const { nickname } = useSelector((state) => state.auth);
 
   useEffect(() => {
     getAllComments(id);
-    return () => {
-      setAllComments([]);
-    };
+    return () => setAllComments([]);
   }, [id]);
 
   const onScreenPress = () => {
@@ -68,15 +66,11 @@ export default function CommentsScreen({ route }) {
     console.log("PostID at CommentScreen:", id);
     const colRef = collection(db, "posts", id, "comments");
     const docsSnap = await getDocs(colRef);
+
     docsSnap.forEach((doc) => {
       const commentData = doc.data();
       const resultComment = { ...commentData };
       console.log("resultComment:", resultComment);
-
-      // const isExist = allComments.find((comment) => comment.id === doc.id);
-      // if (isExist) {
-      //   return;
-      // }
 
       setAllComments((prevState) => [...prevState, resultComment]);
     });
