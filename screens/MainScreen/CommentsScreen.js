@@ -53,7 +53,7 @@ export default function CommentsScreen({ route }) {
 
   useEffect(() => {
     getAllComments(id);
-    return () => setAllComments([]);
+    return () => setAllComments([])
   }, [id]);
 
   const onScreenPress = () => {
@@ -63,20 +63,21 @@ export default function CommentsScreen({ route }) {
   const resultItem = userData.userPosts.find((post) => post.id === id);
 
   const getAllComments = async (id) => {
-    console.log("PostID at CommentScreen:", id);
+    // console.log("PostID at CommentScreen:", id);
     const colRef = collection(db, "posts", id, "comments");
     const docsSnap = await getDocs(colRef);
 
     docsSnap.forEach((doc) => {
+      const commentId = doc.id;
       const commentData = doc.data();
-      const resultComment = { ...commentData };
-      console.log("resultComment:", resultComment);
+      const resultComment = { ...commentData, commentId };
+      // console.log("resultComment:", resultComment);
 
       setAllComments((prevState) => [...prevState, resultComment]);
     });
   };
 
-  console.log("AllComments:", allComments);
+  // console.log("AllComments:", allComments);
 
   const sendComment = async () => {
     const resultComment = { comment, nickname };
@@ -105,11 +106,11 @@ export default function CommentsScreen({ route }) {
 
             {allComments.length > 0 &&
               allComments.map((item) => {
-                const { comment } = item;
+                const { comment, commentId } = item;
                 // const { name, avatar } = owner;
                 if (item.nickname === nickname) {
                   return (
-                    <CommentsSubContainer key={id}>
+                    <CommentsSubContainer key={commentId}>
                       <CommentsTextContainer isOwner>
                         <CommentsText>{comment}</CommentsText>
                         <CommentsData>certain date</CommentsData>
@@ -122,7 +123,7 @@ export default function CommentsScreen({ route }) {
                   );
                 }
                 return (
-                  <CommentsSubContainer key={id}>
+                  <CommentsSubContainer key={commentId}>
                     <CommentsAvatarContainer
                       source={testCommentAvatar}
                     ></CommentsAvatarContainer>
