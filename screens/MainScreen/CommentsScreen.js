@@ -53,7 +53,7 @@ export default function CommentsScreen({ route }) {
 
   useEffect(() => {
     getAllComments(id);
-    return () => setAllComments([])
+    return () => setAllComments([]);
   }, [id]);
 
   const onScreenPress = () => {
@@ -64,6 +64,7 @@ export default function CommentsScreen({ route }) {
 
   const getAllComments = async (id) => {
     // console.log("PostID at CommentScreen:", id);
+    setAllComments([]);
     const colRef = collection(db, "posts", id, "comments");
     const docsSnap = await getDocs(colRef);
 
@@ -84,6 +85,7 @@ export default function CommentsScreen({ route }) {
     const docRef = doc(db, "posts", id);
     const colRef = collection(docRef, "comments");
     addDoc(colRef, resultComment);
+    getAllComments(id);
     setComment("");
   };
 
