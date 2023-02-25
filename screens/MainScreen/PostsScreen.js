@@ -44,6 +44,12 @@ export default function PostsScreen() {
       // console.log(doc.id, " => ", doc.data());
       const { id } = doc;
       const postData = doc.data();
+
+      const isExist = posts.find((post) => post.id === doc.id);
+
+      if (isExist) {
+        return;
+      }
       // console.log("MyPostData:", postData);
       setPosts((prevState) => [...prevState, { id, ...postData }]);
 
@@ -63,16 +69,16 @@ export default function PostsScreen() {
     // console.log("Result from firebase db:", querySnapshot);
   };
 
-  const navigateToComments = (id) => {
-    navigation.navigate("Коментарі", { id });
+  const navigateToComments = (id, uri) => {
+    navigation.navigate("Коментарі", { id, uri });
   };
 
   const navigateToLocation = (latitude, longitude) => {
-    console.log("Latitude and longitude:", latitude, longitude);
+    // console.log("Latitude and longitude:", latitude, longitude);
     navigation.navigate("Мапа", { latitude, longitude });
   };
 
-  console.log("MyState:", posts);
+  // console.log("MyState:", posts);
 
   return (
     <PostsContainer>
@@ -86,49 +92,11 @@ export default function PostsScreen() {
           <PostsOwnerInfoText>{userData.email}</PostsOwnerInfoText>
         </PostsOwnerInfoContainer>
       </PostsOwnerContainer>
-      {/* {posts.length > 0 && (
-        <PostsListContainer>
-          {posts.map(({ id, photo, comment, comments, location }) => {
-            // const { amountOfComments } = comments;
-            return (
-              <PostsItemContainer key={id}>
-                <PostsItemImg source={photo}></PostsItemImg>
-                <PostsItemDescription>{comment}</PostsItemDescription>
-                <PostsItemSubContainer>
-                  <PostsItemDetailsContainer
-                    activeOpacity={0.5}
-                    onPress={() => navigateToComments(id)}
-                  >
-                    <PostsItemIcon source={commentIcon}></PostsItemIcon>
-                    <PostsItemResponsesAmount textIsHighlighted={false}>
-                      {0}
-                    </PostsItemResponsesAmount>
-                  </PostsItemDetailsContainer>
-                  <PostsItemDetailsContainer
-                    onPress={() => navigateToLocation()}
-                    flexGrow
-                    activeOpacity={0.5}
-                  >
-                    <PostsItemIcon source={locationIcon}></PostsItemIcon>
-                    <PostsItemResponsesAmount
-                      isLink
-                      textIsHighlighted={location !== ""}
-                    >
-                      {location}
-                    </PostsItemResponsesAmount>
-                  </PostsItemDetailsContainer>
-                </PostsItemSubContainer>
-              </PostsItemContainer>
-            );
-          })}
-        </PostsListContainer>
-      )} */}
       <PostsListContainer>
         {posts.length > 0 &&
           posts.map(
             ({ id, photo: uri, comment, location, latitude, longitude }) => {
-              // const { amountOfComments } = comments;
-              console.log("img uri:", uri);
+              console.log("My post ID inside PostsScreen:", id);
               return (
                 <PostsItemContainer key={id}>
                   <PostsItemImg source={{ uri }}></PostsItemImg>
@@ -136,7 +104,7 @@ export default function PostsScreen() {
                   <PostsItemSubContainer>
                     <PostsItemDetailsContainer
                       activeOpacity={0.5}
-                      onPress={() => navigateToComments(id)}
+                      onPress={() => navigateToComments(id, uri)}
                     >
                       <PostsItemIcon source={commentIcon}></PostsItemIcon>
                       <PostsItemResponsesAmount textIsHighlighted={false}>
