@@ -37,16 +37,9 @@ export default function PostsScreen() {
     const docsSnap = await getDocs(colRef);
 
     docsSnap.forEach((doc) => {
-      // const comment = doc.data()
-      // console.log(`Total comments of ${id}: ${doc.id} => ${doc.data()}`);
       counter = counter + 1;
-      // console.log("Total comments:", counter);
-      // setComments((prevState) => [...prevState, { commentId: doc.id, ...comment }]);
     });
-
-    // console.log("Counter out of forEach function:", counter);
-    // console.log(`Total comments of ${id}: ${comments.length}`);
-    return counter
+    return counter;
   };
 
   const getAllPosts = async () => {
@@ -55,12 +48,12 @@ export default function PostsScreen() {
     await querySnapshot.forEach(async (doc) => {
       const { id } = doc;
       const totalComments = await getComments(id);
-      // const totalComments = getComments(id);
-      // console.log("TotalComments of one Post:", totalComments);
-      // const commentsLength = comments.length;
       const postData = doc.data();
 
-      setPosts((prevState) => [...prevState, { id, ...postData, totalComments }]);
+      setPosts((prevState) => [
+        ...prevState,
+        { id, ...postData, totalComments },
+      ]);
     });
   };
 
@@ -71,8 +64,6 @@ export default function PostsScreen() {
   const navigateToLocation = (latitude, longitude) => {
     navigation.navigate("Мапа", { latitude, longitude });
   };
-
-  // console.log("MyState:", posts);
 
   return (
     <PostsContainer>
@@ -89,8 +80,15 @@ export default function PostsScreen() {
       <PostsListContainer>
         {posts.length > 0 &&
           posts.map(
-            ({ id, photo: uri, comment, location, latitude, longitude, totalComments }) => {
-              // console.log("My post ID inside PostsScreen:", id);
+            ({
+              id,
+              photo: uri,
+              comment,
+              location,
+              latitude,
+              longitude,
+              totalComments,
+            }) => {
               return (
                 <PostsItemContainer key={id}>
                   <PostsItemImg source={{ uri }}></PostsItemImg>
@@ -100,8 +98,12 @@ export default function PostsScreen() {
                       activeOpacity={0.5}
                       onPress={() => navigateToComments(id, uri)}
                     >
-                      <PostsItemIcon source={totalComments ? commentIconFilled : commentIcon}></PostsItemIcon>
-                      <PostsItemResponsesAmount textIsHighlighted={totalComments !== 0}>
+                      <PostsItemIcon
+                        source={totalComments ? commentIconFilled : commentIcon}
+                      ></PostsItemIcon>
+                      <PostsItemResponsesAmount
+                        textIsHighlighted={totalComments !== 0}
+                      >
                         {totalComments}
                       </PostsItemResponsesAmount>
                     </PostsItemDetailsContainer>

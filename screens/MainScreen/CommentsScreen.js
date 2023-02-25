@@ -3,14 +3,10 @@ import db from "../../friebase/config";
 import { useSelector } from "react-redux";
 import {
   doc,
-  getDoc,
   collection,
-  setDoc,
-  updateDoc,
   addDoc,
   getDocs,
 } from "firebase/firestore";
-// import { ref } from "firebase/storage";
 
 import {
   Dimensions,
@@ -63,7 +59,6 @@ export default function CommentsScreen({ route }) {
   const resultItem = userData.userPosts.find((post) => post.id === id);
 
   const getAllComments = async (id) => {
-    // console.log("PostID at CommentScreen:", id);
     setAllComments([]);
     const colRef = collection(db, "posts", id, "comments");
     const docsSnap = await getDocs(colRef);
@@ -72,13 +67,10 @@ export default function CommentsScreen({ route }) {
       const commentId = doc.id;
       const commentData = doc.data();
       const resultComment = { ...commentData, commentId };
-      // console.log("resultComment:", resultComment);
 
       setAllComments((prevState) => [...prevState, resultComment]);
     });
   };
-
-  // console.log("AllComments:", allComments);
 
   const sendComment = async () => {
     const resultComment = { comment, nickname };
@@ -109,7 +101,6 @@ export default function CommentsScreen({ route }) {
             {allComments.length > 0 &&
               allComments.map((item) => {
                 const { comment, commentId } = item;
-                // const { name, avatar } = owner;
                 if (item.nickname === nickname) {
                   return (
                     <CommentsSubContainer key={commentId}>

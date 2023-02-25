@@ -13,7 +13,7 @@ import * as Location from "expo-location";
 
 import db from "../../friebase/config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { doc, setDoc, addDoc, collection } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 
 import { EvilIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -62,7 +62,7 @@ export default function CreatePostsScreen({ navigation }) {
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
 
   const { userId, nickname } = useSelector((state) => {
-    console.log(state.auth);
+    // console.log(state.auth);
     return state.auth;
   });
 
@@ -176,7 +176,7 @@ export default function CreatePostsScreen({ navigation }) {
   };
 
   const onSubmit = () => {
-    console.log("Photo data:", photoData);
+    // console.log("Photo data:", photoData);
     uploadPostToServer();
 
     navigation.navigate("Публікації", { photoData });
