@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "react-native-hw-01",
-    "slug": "react-native-hw-01",
+    "name": "react-native-hw-07",
+    "slug": "react-native-hw-07",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,6 +29,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "React Native homework. Learned bases with React Native Components and Firebase v9 + Redux.",
+    "githubUrl": "https://github.com/exmahinator/react-native-hw-07"
   }
 }
